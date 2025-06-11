@@ -1,0 +1,3 @@
+# .dockerignore в папке /backend
+node_modules
+.env
