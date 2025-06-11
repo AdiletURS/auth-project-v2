@@ -47,6 +47,7 @@ services:
     # томе (volume) на твоем компьютере.
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./backend/db_init:/docker-entrypoint-initdb.d
     # Порты для БД. Мы пробрасываем порт 5433 твоего компьютера на 5432
     # внутри контейнера. Это нужно, чтобы ты мог подключиться к БД
     # с помощью специальных программ (например, DBeaver или из WebStorm) для просмотра таблиц.
