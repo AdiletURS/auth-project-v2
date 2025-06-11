@@ -4,6 +4,7 @@ const express = require('express');
 // Импортируем наш модуль для работы с БД
 const bcrypt = require('bcryptjs');
 const db = require('./db');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -65,6 +66,56 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
+
+// --- НАШ НОВЫЙ ENDPOINT ВХОДА ---
+app.post('/api/login', async (req, res) => {
+    try {
+        const { login, password } = req.body;
+        if (!login || !password) {
+            return res.status(400).json({ message: "Логин и пароль не могут быть пустыми" });
+        }
+
+        // 1. Ищем пользователя в базе
+        const userResult = await db.query('SELECT * FROM users WHERE login = $1', [login]);
+        if (userResult.rows.length === 0) {
+            // Важно: не говорим "пользователь не найден". Говорим общую ошибку для безопасности.
+            return res.status(401).json({ message: "Неверные учетные данные" });
+        }
+        const user = userResult.rows[0];
+
+        // 2. Сравниваем предоставленный пароль с хешем в базе
+        const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: "Неверные учетные данные" });
+        }
+
+        // 3. Генерируем токены
+        const payload = { id: user.id, login: user.login };
+
+        const accessToken = jwt.sign(
+            payload,
+            process.env.JWT_ACCESS_SECRET,
+            { expiresIn: '10m' } // 10 минут
+        );
+
+        const refreshToken = jwt.sign(
+            payload,
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: '7d' } // 7 дней
+        );
+
+        // 4. Отправляем токены пользователю
+        res.json({
+            message: "Вход выполнен успешно",
+            accessToken,
+            refreshToken
+        });
+
+    } catch (error) {
+        console.error('Ошибка при входе:', error);
+        res.status(500).json({ message: "Внутренняя ошибка сервера" });
+    }
+});
 
 // Запускаем сервер и предварительно проверяем подключение к БД
 const startServer = async () => {

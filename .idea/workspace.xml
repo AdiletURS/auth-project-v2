@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="614e69d0-cc16-439f-a076-c9b64ca9fad5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/db_init/init.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
@@ -76,7 +75,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1749626596203</updated>
-      <workItem from="1749626597491" duration="5081000" />
+      <workItem from="1749626597491" duration="6315000" />
     </task>
     <servers />
   </component>

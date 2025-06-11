@@ -25,6 +25,9 @@ services:
       - DB_USER=myuser
       - DB_PASSWORD=mypassword
       - DB_NAME=mydatabase
+
+      - JWT_ACCESS_SECRET=my-super-secret-access-key-123
+      - JWT_REFRESH_SECRET=my-other-super-secret-refresh-key-456
     # Указываем, что наш бэкенд должен запуститься только ПОСЛЕ того,
     # как будет готов сервис postgres_db. Это важно.
     depends_on:
