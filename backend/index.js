@@ -138,6 +138,58 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+
+// --- НАШ НОВЫЙ ENDPOINT ОБНОВЛЕНИЯ ТОКЕНА ---
+app.post('/api/refresh', async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+        if (!refreshToken) {
+            return res.status(401).json({ message: "Refresh токен не предоставлен" });
+        }
+
+        // 1. Верифицируем refresh токен
+        let userData;
+        try {
+            userData = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+        } catch (e) {
+            // Если ошибка верификации (неверная подпись, истек срок)
+            return res.status(403).json({ message: "Refresh токен недействителен или истек" });
+        }
+
+        // 2. Проверяем, что пользователь из токена все еще существует
+        const userResult = await db.query('SELECT * FROM users WHERE id = $1', [userData.id]);
+        if (userResult.rows.length === 0) {
+            return res.status(403).json({ message: "Пользователь, связанный с токеном, не найден" });
+        }
+        const user = userResult.rows[0];
+
+        // 3. Генерируем новую пару токенов
+        const payload = { id: user.id, login: user.login };
+
+        const newAccessToken = jwt.sign(
+            payload,
+            process.env.JWT_ACCESS_SECRET,
+            { expiresIn: '10m' }
+        );
+
+        const newRefreshToken = jwt.sign(
+            payload,
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        // 4. Отправляем новые токены
+        res.json({
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+        });
+
+    } catch (error) {
+        console.error('Ошибка при обновлении токена:', error);
+        res.status(500).json({ message: "Внутренняя ошибка сервера" });
+    }
+});
+
 // Запускаем сервер и предварительно проверяем подключение к БД
 const startServer = async () => {
     await checkDbConnection();
