@@ -5,6 +5,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const db = require('./db');
 const jwt = require('jsonwebtoken');
+const authMiddleware = require('./authMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +29,26 @@ app.get('/', (req, res) => {
     res.send('Бэкенд для системы авторизации работает!');
 });
 
+// --- НАШ НОВЫЙ ЗАЩИЩЕННЫЙ МАРШРУТ ---
+app.get('/api/profile', authMiddleware, async (req, res) => {
+    try {
+        // Благодаря middleware, у нас есть доступ к req.user
+        const userId = req.user.id;
+
+        // Получаем данные пользователя из БД, но уже без хеша пароля
+        const userResult = await db.query('SELECT id, login, created_at FROM users WHERE id = $1', [userId]);
+
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ message: "Пользователь не найден" });
+        }
+
+        res.json(userResult.rows[0]);
+
+    } catch (error) {
+        console.error('Ошибка при получении профиля:', error);
+        res.status(500).json({ message: "Внутренняя ошибка сервера" });
+    }
+});
 
 // --- НАШ НОВЫЙ ENDPOINT РЕГИСТРАЦИИ ---
 app.post('/api/register', async (req, res) => {
