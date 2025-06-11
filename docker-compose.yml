@@ -1,0 +1,58 @@
+# docker-compose.yml в корне проекта
+
+# Указываем версию синтаксиса docker-compose
+version: '3.8'
+
+# "services" - это контейнеры, из которых будет состоять наше приложение
+services:
+  # Наш бэкенд-сервис
+  backend:
+    # Указываем, что образ нужно собрать из Dockerfile
+    build:
+      # Контекст - папка, где лежат исходники и Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
+    # Даем имя контейнеру для удобства
+    container_name: auth_backend
+    # Пробрасываем порты, как мы делали с docker run
+    ports:
+      - "3000:3000"
+    # Переменные окружения для нашего приложения.
+    # Мы будем их использовать для подключения к БД.
+    environment:
+      - DB_HOST=postgres_db # Имя хоста БД, такое же как имя сервиса ниже
+      - DB_PORT=5432
+      - DB_USER=myuser
+      - DB_PASSWORD=mypassword
+      - DB_NAME=mydatabase
+    # Указываем, что наш бэкенд должен запуститься только ПОСЛЕ того,
+    # как будет готов сервис postgres_db. Это важно.
+    depends_on:
+      - postgres_db
+
+  # Сервис базы данных PostgreSQL
+  postgres_db:
+    # Используем готовый официальный образ PostgreSQL версии 14
+    image: postgres:14-alpine
+    # Даем имя контейнеру
+    container_name: auth_postgres
+    # Переменные окружения для инициализации базы данных.
+    # Postgres сам создаст пользователя и базу с этими данными при первом запуске.
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=mydatabase
+    # "volume" - это способ сохранить данные. Если мы удалим контейнер с БД,
+    # данные (пользователи) не пропадут, т.к. они хранятся в специальном
+    # томе (volume) на твоем компьютере.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # Порты для БД. Мы пробрасываем порт 5433 твоего компьютера на 5432
+    # внутри контейнера. Это нужно, чтобы ты мог подключиться к БД
+    # с помощью специальных программ (например, DBeaver или из WebStorm) для просмотра таблиц.
+    ports:
+      - "5433:5432"
+
+# Определяем том (volume), который мы упомянули выше
+volumes:
+  postgres_data:
