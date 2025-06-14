@@ -1,12 +1,12 @@
 <script setup>
-import {onBeforeMount, onMounted, ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import InfiniteScroll from "@/components/InfiniteScroll.vue";
 
 const introPhrases = [
-    "the best shirts in za warudo",
-    "shirts only for gigachads",
-    "very unordinary shirts, even tho, we call them \"ordinary\"",
-    "shirts in which you'll look much cooler"
+  "the best shirts in za warudo",
+  "shirts only for gigachads",
+  "very unordinary shirts, even tho, we call them \"ordinary\"",
+  "shirts in which you'll look much cooler"
 ];
 
 const pickedPhrase = ref(0);
@@ -17,17 +17,15 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <section>
-    <div class="div1">
-      <h4>sup, nerd</h4>
-      <h2>this is Ordinary Nation</h2>
+  <section id="intro">
+    <div class="greet">
+      <h2>sup, nerd. this is...</h2>
+      <img class="logo" src="@/assets/logo_full.png" alt="Ordinary Nation Logo">
       <div>
-        <p>{{ introPhrases[pickedPhrase] }}</p>
+        <i style="color: rgba(0, 0, 0, .3)">{{ introPhrases[pickedPhrase] }}</i>
       </div>
     </div>
-  </section>
 
-  <section>
     <InfiniteScroll>
       <img src="@/assets/showcase/shirt_doom_cum.jpg" alt="Doom CUM Shirt">
       <img src="@/assets/showcase/shirt_evil_jonkler.jpg" alt="Evil Jonkler Shirt">
@@ -40,6 +38,22 @@ onBeforeMount(() => {
 
 <style scoped>
 #intro {
-  margin-top: 40vh;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.greet {
+  margin-bottom: 22px;
+}
+
+.logo {
+  image-rendering: optimizeSpeed;
+  width: 60%;
+
+  @media (max-width: 850px) {
+    width: 100%;
+  }
 }
 </style>

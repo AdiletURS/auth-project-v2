@@ -20,7 +20,7 @@
   display: flex;
   width: 100%;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent)
+  -webkit-mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent);
 }
 
 .scroll div {
@@ -81,5 +81,11 @@
   width: 500px;
   height: 500px;
   object-fit: cover;
+
+  /* Phone */
+  @media (max-width: 850px) {
+    width: 250px;
+    height: 250px;
+  }
 }
 </style>

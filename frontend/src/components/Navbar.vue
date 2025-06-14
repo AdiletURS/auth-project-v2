@@ -1,12 +1,16 @@
 <script setup>
 import {Icon} from "@iconify/vue";
 import {ref} from "vue";
+import {useRoute} from "vue-router";
 
 const showDropdown = ref(false);
 const toggleDropdown = () => {
   showDropdown.value = !showDropdown.value;
 }
 
+const isActivePath = (currentPath) => {
+  return useRoute().path === currentPath;
+}
 </script>
 
 <template>
@@ -19,8 +23,8 @@ const toggleDropdown = () => {
     <button id="mobile_menu" @click="toggleDropdown"><Icon icon="material-symbols:menu" /></button>
 
     <ul v-show="showDropdown" class="links">
-      <li><RouterLink to="/">HOME</RouterLink></li>
-      <li><RouterLink to="/shop">SHOP</RouterLink></li>
+      <li><RouterLink to="/" :class="isActivePath('/') ? 'active' : ''">HOME</RouterLink></li>
+      <li><RouterLink to="/shop" :class="isActivePath('/shop') ? 'active' : ''">SHOP</RouterLink></li>
       <li id="link_login" class="small"><a href="#"><Icon icon="material-symbols:login-sharp"/></a></li>
     </ul>
   </nav>
@@ -74,6 +78,7 @@ const toggleDropdown = () => {
 
   border-inline: 2px solid var(--color-secondary);
 
+  z-index: 100;
   list-style-type: none;
 
   li {
@@ -107,6 +112,9 @@ const toggleDropdown = () => {
 a {
   text-decoration: none;
   color: var(--color-secondary);
+}
+.active {
+  text-decoration: underline dotted;
 }
 
 /* Desktop* */
