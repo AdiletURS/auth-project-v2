@@ -146,6 +146,11 @@ a {
   .links { display: flex !important /* *Added in order to ignore v-show directive */ }
 }
 
+/* Desktop* */
+@media (min-width: 850px) {
+  .links { display: flex !important /* *Added in order to ignore v-show directive */ }
+}
+
 /* Tablet */
 @media (max-width: 1200px) {
   .navbar {
