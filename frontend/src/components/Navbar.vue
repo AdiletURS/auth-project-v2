@@ -1,19 +1,30 @@
 <script setup>
-import { Icon } from "@iconify/vue";
+import {Icon} from "@iconify/vue";
 </script>
 
 <template>
   <nav class="navbar">
     <div class="logo">
-      <Icon icon="icon-park-twotone:t-shirt" />
+      <Icon icon="icon-park-twotone:t-shirt"/>
       <span>Ordinary Nation</span>
     </div>
 
-    <ul class="links">
-      <li><RouterLink to="/">HOME</RouterLink></li>
-      <li><RouterLink to="/shop">SHOP</RouterLink></li>
-      <li><a href="#"><Icon icon="material-symbols:login-sharp" /></a></li>
-    </ul>
+    <table class="links">
+      <tr>
+        <td>
+          <RouterLink to="/">HOME</RouterLink>
+        </td>
+        <td>
+          <RouterLink to="/shop">SHOP</RouterLink>
+        </td>
+<!--        <td>
+          <RouterLink to="/admin">ADMIN</RouterLink>
+        </td>-->
+        <td id="btn_login"><a href="#">
+          <Icon icon="material-symbols:login-sharp"/>
+        </a></td>
+      </tr>
+    </table>
   </nav>
 </template>
 
@@ -29,38 +40,33 @@ import { Icon } from "@iconify/vue";
   border-bottom: 2px solid var(--color-secondary);
 }
 
-.links {
+table, td {
   height: 100%;
-
-  display: flex;
-  align-items: center;
-  gap: 4px;
-
-  list-style-type: none;
-}
-
-li {
-  width: 100px;
-  height: 100%;
-
-  line-height: 60px;
-  text-align: center;
-  text-decoration: none;
-  color: var(--color-secondary);
 
   border-inline: 2px solid var(--color-secondary);
+  border-collapse: collapse;
+}
 
-  transition: .1s;
-}
-li:hover {
-  width: 110px;
-}
-li:hover a {
-  text-decoration: underline;
+td {
+  width: 120px;
+  text-align: center;
 }
 
 a {
+  width:100%;
+  height:100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   text-decoration: none;
-  color: var(--color-secondary)
+  color: var(--color-secondary);
+
+  &:hover { text-decoration: underline }
+}
+
+#btn_login {
+  width: 60px;
 }
 </style>
