@@ -28,6 +28,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Phone */
 @media (max-width: 850px) {
     body {
         font-size: 20px;

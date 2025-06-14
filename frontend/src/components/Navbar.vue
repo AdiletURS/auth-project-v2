@@ -11,10 +11,10 @@ const toggleDropdown = () => {
 
 <template>
   <nav class="navbar">
-    <div class="logo">
+    <RouterLink class="logo" to="/">
       <Icon icon="icon-park-twotone:t-shirt"/>
       <span>Ordinary Nation</span>
-    </div>
+    </RouterLink>
 
     <button id="mobile_menu" @click="toggleDropdown"><Icon icon="material-symbols:menu" /></button>
 
@@ -94,7 +94,7 @@ const toggleDropdown = () => {
   }
 }
 
-a {
+.links a {
   width: 100%;
   height: 100%;
 
@@ -102,10 +102,11 @@ a {
   justify-content: center;
   align-items: center;
 
+  &:hover { text-decoration: underline }
+}
+a {
   text-decoration: none;
   color: var(--color-secondary);
-
-  &:hover { text-decoration: underline }
 }
 
 /* Desktop* */
