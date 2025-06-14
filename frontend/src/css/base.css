@@ -28,3 +28,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+@media (max-width: 850px) {
+    body {
+        font-size: 20px;
+    }
+}
