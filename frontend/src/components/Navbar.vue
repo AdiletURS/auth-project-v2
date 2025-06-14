@@ -9,22 +9,11 @@ import {Icon} from "@iconify/vue";
       <span>Ordinary Nation</span>
     </div>
 
-    <table class="links">
-      <tr>
-        <td>
-          <RouterLink to="/">HOME</RouterLink>
-        </td>
-        <td>
-          <RouterLink to="/shop">SHOP</RouterLink>
-        </td>
-<!--        <td>
-          <RouterLink to="/admin">ADMIN</RouterLink>
-        </td>-->
-        <td id="btn_login"><a href="#">
-          <Icon icon="material-symbols:login-sharp"/>
-        </a></td>
-      </tr>
-    </table>
+    <ul class="links">
+      <li><RouterLink to="/">HOME</RouterLink></li>
+      <li><RouterLink to="/shop">SHOP</RouterLink></li>
+      <li class="small"><a href="#"><Icon icon="material-symbols:login-sharp"/></a></li>
+    </ul>
   </nav>
 </template>
 
@@ -40,21 +29,41 @@ import {Icon} from "@iconify/vue";
   border-bottom: 2px solid var(--color-secondary);
 }
 
-table, td {
+.links {
+  padding: 0;
+  width: 340px;
   height: 100%;
 
-  border-inline: 2px solid var(--color-secondary);
-  border-collapse: collapse;
-}
+  display: flex;
+  align-items: center;
 
-td {
-  width: 120px;
+  border-inline: 2px solid var(--color-secondary);
+
+  list-style-type: none;
+}
+li {
+  height: 100%;
+
+  flex: 1;
   text-align: center;
+  border-right: 2px solid var(--color-secondary);
+  transition: flex-grow .1s linear;
+  overflow: hidden;
+}
+li:last-child {
+  border-right: none;
+}
+li:hover {
+  flex-grow: 1.1;
+}
+li.small {
+  flex-grow: .4;
+  &:hover { flex-grow: .45 }
 }
 
 a {
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 
   display: flex;
   justify-content: center;
@@ -64,9 +73,5 @@ a {
   color: var(--color-secondary);
 
   &:hover { text-decoration: underline }
-}
-
-#btn_login {
-  width: 60px;
 }
 </style>
