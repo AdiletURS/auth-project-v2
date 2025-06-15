@@ -21,6 +21,7 @@
   display: flex;
   width: 100%;
   overflow: hidden;
+  z-index: -5;
   mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent);
 }
 

@@ -1,10 +1,16 @@
 <script setup>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
+import UnifiedAuthContainer from "@/components/auth/UnifiedAuthContainer.vue";
+import SignUpForm from "@/components/auth/SignUpForm.vue";
 </script>
 
 <template>
   <Navbar />
+  <UnifiedAuthContainer>
+    <SignUpForm />
+  </UnifiedAuthContainer>
+
   <div id="router_view">
     <RouterView />
   </div>
@@ -13,7 +19,7 @@ import Footer from "@/components/Footer.vue";
 
 <style scoped>
 #router_view {
-  padding: 10px 200px;
+  padding: 32px 200px;
 }
 
 /* Tablet */

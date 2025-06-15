@@ -19,7 +19,6 @@
 
 <style scoped>
 .footer {
-  margin-top: 24px;
   padding: 32px var(--padding-inline);
   border-top: 2px solid var(--color-secondary);
 }

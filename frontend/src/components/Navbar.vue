@@ -36,14 +36,13 @@ const isActivePath = (currentPath) => {
   height: 60px;
   padding-inline: var(--padding-inline);
 
-  position: fixed;
+  position: sticky;
   top: 0;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  z-index: 100;
   border-bottom: 2px solid var(--color-secondary);
   background-color: var(--color-primary);
 }
@@ -84,7 +83,6 @@ const isActivePath = (currentPath) => {
 
   border-inline: 2px solid var(--color-secondary);
 
-  z-index: 100;
   list-style-type: none;
 
   li {
