@@ -1,10 +1,16 @@
 <script setup>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
+import UnifiedAuthContainer from "@/components/auth/UnifiedAuthContainer.vue";
+import SignUpForm from "@/components/auth/SignUpForm.vue";
 </script>
 
 <template>
   <Navbar />
+  <UnifiedAuthContainer>
+    <SignUpForm />
+  </UnifiedAuthContainer>
+
   <div id="router_view">
     <RouterView />
   </div>
