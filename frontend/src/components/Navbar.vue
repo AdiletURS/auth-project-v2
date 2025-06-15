@@ -32,14 +32,20 @@ const isActivePath = (currentPath) => {
 
 <style scoped>
 .navbar {
+  width: 100%;
   height: 60px;
-  padding-inline: 200px;
+  padding-inline: var(--padding-inline);
+
+  position: fixed;
+  top: 0;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
+  z-index: 100;
   border-bottom: 2px solid var(--color-secondary);
+  background-color: var(--color-primary);
 }
 
 #mobile_menu {
@@ -110,6 +116,7 @@ const isActivePath = (currentPath) => {
   &:hover { text-decoration: underline }
 }
 a {
+  filter: none;
   text-decoration: none;
   color: var(--color-secondary);
 }
@@ -125,14 +132,14 @@ a {
 /* Tablet */
 @media (max-width: 1200px) {
   .navbar {
-    padding-inline: 50px;
+    padding-inline: var(--padding-inline-tablet);
   }
 }
 
 /* Phone */
 @media (max-width: 850px) {
   .navbar {
-    padding-inline: 10px;
+    padding-inline: var(--padding-inline-mobile);
   }
 
   .logo svg {

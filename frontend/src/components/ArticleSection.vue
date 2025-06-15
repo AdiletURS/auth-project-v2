@@ -9,7 +9,7 @@ defineProps({
 </script>
 
 <template>
-  <section>
+  <section class="container">
     <div class="title">
       <div>
         <h2>{{ title }}</h2>
@@ -26,7 +26,12 @@ defineProps({
 </template>
 
 <style scoped>
+.container {
+  margin-top: 64px;
+}
+
 .title {
+  margin-left: 32px;
   display: flex;
   align-content: center;
   gap: 24px;
@@ -38,6 +43,11 @@ defineProps({
     align-items: center;
 
     font-size: 2.5rem;
+  }
+
+  /* Phone */
+  @media (max-width: 850px) {
+    margin-left: 0;
   }
 }
 

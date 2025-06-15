@@ -13,6 +13,7 @@
   </div>
 </template>
 
+<!--suppress CssInvalidPropertyValue -->
 <style scoped>
 /*  Scroll Effect */
 .scroll {
@@ -20,7 +21,7 @@
   display: flex;
   width: 100%;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent);
 }
 
 .scroll div {

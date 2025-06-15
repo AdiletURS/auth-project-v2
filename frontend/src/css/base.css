@@ -7,6 +7,10 @@
     --color-shadow: rgba(0, 0, 0, 0.2);
 
     --color-select: #a0a0a0;
+
+    --padding-inline: 200px;
+    --padding-inline-tablet: 50px;
+    --padding-inline-mobile: 10px;
 }
 
 *,
@@ -19,7 +23,7 @@
 body {
     background: var(--color-primary);
 
-    font-family: "JetBrains Mono", sans-serif;
+    font-family: "JetBrains Mono", monospace;
     font-size: 32px;
     font-weight: 300;
 
