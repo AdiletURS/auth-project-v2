@@ -1,8 +1,6 @@
 <script setup>
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
-import UnifiedAuthContainer from "@/components/auth/UnifiedAuthContainer.vue";
-import SignInForm from "@/components/auth/SignInForm.vue";
 </script>
 
 <template>
