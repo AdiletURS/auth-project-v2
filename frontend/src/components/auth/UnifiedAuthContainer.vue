@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from "vue";
+import {reactive} from "vue";
 import SignUpForm from "@/components/auth/SignUpForm.vue";
 import SignInForm from "@/components/auth/SignInForm.vue";
 
@@ -53,7 +53,7 @@ const setFormType = (type) => {
   transform: rotate(180deg);
 }
 
-.form_cont:deep(form) {
+:deep(form) {
   display: flex;
   flex-direction: column;
   justify-content: right;

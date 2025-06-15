@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import ShopView from "@/views/ShopView.vue";
+import NotFoundView from "@/views/NotFoundView.vue";
+import DashboradView from "@/views/DashboradView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,17 +17,17 @@ const router = createRouter({
             name: "shop",
             component: ShopView
         },
+        {
+            path: "/dash",
+            name: "dashboard",
+            component: DashboradView
+        },
 
-        /*{
-            path: "/reg",
-            name: "sign up",
-            component: SignUpView
-        },{
-
-            path: "/login",
-            name: "sign in",
-            component: SignUpView
-        }*/
+        {
+            path: "/:pathMatch(.*)*",
+            name: "not found",
+            component: NotFoundView
+        }
     ]
 })
 
