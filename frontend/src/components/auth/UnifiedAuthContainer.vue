@@ -1,37 +1,37 @@
 <script setup>
-defineProps({
-  title: String
-})
+import {reactive, ref} from "vue";
+import SignUpForm from "@/components/auth/SignUpForm.vue";
+import SignInForm from "@/components/auth/SignInForm.vue";
+
+const props = defineProps({
+  formType: {
+    type: String,
+    default: "sign-in"
+  }
+});
+
+const state = reactive({
+  title: props.formType.toUpperCase(),
+  formType: props.formType
+});
+
+const setFormType = (type) => {
+  state.formType = type;
+  state.title = type.toUpperCase();
+}
 </script>
 
 <template>
-  <div class="layout">
-    <div class="auth_container">
-      <h2 class="title">{{ title }}</h2>
-      <div class="slot">
-        <slot></slot>
-      </div>
+  <div class="auth_container">
+    <h2 class="title">{{ state.title }}</h2>
+    <div class="form_cont">
+      <SignInForm :setForm="setFormType" v-if="state.formType === 'sign-in'"/>
+      <SignUpForm v-else />
     </div>
   </div>
 </template>
 
 <style scoped>
-.layout {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-
-  transform: translate(-50%, -50%);
-  backdrop-filter: blur(12px);
-}
-
 .auth_container {
   width: 500px;
   padding: 24px;
@@ -53,7 +53,7 @@ defineProps({
   transform: rotate(180deg);
 }
 
-.slot:deep(form) {
+.form_cont:deep(form) {
   display: flex;
   flex-direction: column;
   justify-content: right;

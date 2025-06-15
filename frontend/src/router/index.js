@@ -14,12 +14,18 @@ const router = createRouter({
             path: "/shop",
             name: "shop",
             component: ShopView
-        }
-        // {
-        //     path: "/reg",
-        //     name: "registration",
-        //     component: RegistrationView
-        // }
+        },
+
+        /*{
+            path: "/reg",
+            name: "sign up",
+            component: SignUpView
+        },{
+
+            path: "/login",
+            name: "sign in",
+            component: SignUpView
+        }*/
     ]
 })
 

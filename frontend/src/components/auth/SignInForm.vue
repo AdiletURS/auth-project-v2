@@ -1,5 +1,7 @@
 <script setup>
-
+defineProps({
+  setForm: Function
+})
 </script>
 
 <template>
@@ -10,10 +12,21 @@
     <label for="password">password</label>
     <input type="password" id="password" name="password" placeholder="ur password">
 
-    <button type="submit">sign in</button>
+    <div class="buttons">
+      <a @click="setForm('sign-up')" href="#">create account</a>
+      <button type="submit">sign in</button>
+    </div>
   </form>
 </template>
 
 <style scoped>
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
+  a {
+    font-size: .6em;
+  }
+}
 </style>

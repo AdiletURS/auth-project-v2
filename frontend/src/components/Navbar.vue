@@ -2,6 +2,13 @@
 import {Icon} from "@iconify/vue";
 import {ref} from "vue";
 import {useRoute} from "vue-router";
+import UnifiedAuthContainer from "@/components/auth/UnifiedAuthContainer.vue";
+import SignInForm from "@/components/auth/SignInForm.vue";
+
+const showAuth = ref(false);
+const toggleAuth = () => {
+  showAuth.value = !showAuth.value;
+}
 
 const showDropdown = ref(false);
 const toggleDropdown = () => {
@@ -25,12 +32,25 @@ const isActivePath = (currentPath) => {
     <ul v-show="showDropdown" class="links">
       <li><RouterLink to="/" :class="isActivePath('/') ? 'active' : ''">HOME</RouterLink></li>
       <li><RouterLink to="/shop" :class="isActivePath('/shop') ? 'active' : ''">SHOP</RouterLink></li>
-      <li id="link_login" class="small"><a href="#"><Icon icon="material-symbols:login-sharp"/></a></li>
+      <li id="link_login" class="small">
+        <a @click="toggleAuth" href="#"><Icon icon="material-symbols:login-sharp"/></a>
+
+        <UnifiedAuthContainer v-if="showAuth" class="auth_dropdown">
+          <SignInForm />
+        </UnifiedAuthContainer>
+      </li>
     </ul>
   </nav>
 </template>
 
 <style scoped>
+.auth_dropdown {
+  margin-right: var(--padding-inline);
+  position: fixed;
+  right: 0;
+}
+
+
 .navbar {
   width: 100%;
   height: 60px;
@@ -92,7 +112,6 @@ const isActivePath = (currentPath) => {
     text-align: center;
     border-right: 2px solid var(--color-secondary);
     transition: flex-grow .1s linear;
-    overflow: hidden;
 
     &:last-child { border-right: none }
     &:hover { flex-grow: 1.1 }
