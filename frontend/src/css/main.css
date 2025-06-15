@@ -40,11 +40,31 @@ input {
 label {
     margin-left: 6px;
     font-size: .8em;
+    user-select: none;
 }
 
 a {
     filter: opacity(.6);
     &:hover {
         filter: none;
+    }
+}
+
+input[type="checkbox"] {
+    padding: 0;
+
+    width: 20px;
+    height: 20px;
+
+    border: 2px solid var(--color-secondary);
+    appearance: none;
+
+    transition: transform .1s linear;
+
+    &:hover { box-shadow: inset 0 0 0 1px black }
+    &:active { transform: translateY(1px) }
+    &:checked {
+        box-shadow: inset 0 0 0 2px var(--color-primary);
+        background-color: var(--color-secondary);
     }
 }

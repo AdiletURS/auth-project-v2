@@ -1,11 +1,13 @@
 <script setup>
-
+defineProps({
+  title: String
+})
 </script>
 
 <template>
   <div class="layout">
     <div class="auth_container">
-      <h2 class="title">title</h2>
+      <h2 class="title">{{ title }}</h2>
       <div class="slot">
         <slot></slot>
       </div>
