@@ -7,7 +7,7 @@ import SignUpForm from "@/components/auth/SignUpForm.vue";
 
 <template>
   <Navbar />
-  <UnifiedAuthContainer>
+  <UnifiedAuthContainer title="sign up">
     <SignUpForm />
   </UnifiedAuthContainer>
 
