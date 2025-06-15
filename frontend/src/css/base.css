@@ -4,6 +4,7 @@
 :root {
     --color-primary: #FFF;
     --color-secondary: #000;
+    --color-shadow: rgba(0, 0, 0, 0.2);
 
     --color-select: #a0a0a0;
 }

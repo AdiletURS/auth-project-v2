@@ -1,6 +1,7 @@
 <script setup>
 import {onBeforeMount, ref} from "vue";
 import InfiniteScroll from "@/components/InfiniteScroll.vue";
+import ArticleSection from "@/components/ArticleSection.vue";
 
 const introPhrases = [
   "the best shirts in za warudo",
@@ -34,6 +35,20 @@ onBeforeMount(() => {
       <img src="@/assets/showcase/shirt_teto_pear.jpg" alt="Teto Pear Shirt">
     </InfiniteScroll>
   </section>
+
+  <ArticleSection title="how we make our shirts" subtitle="we make very high quality stuff ©2025">
+    <p>
+      first, we take order very high quality cotton, from which we make very high quality basic shirt.
+      then, with very high quality machine we apply very high quality print using very high quality paint, which is
+      washing machine safe.
+      after, we put our wery high quality product into a very high quality package.
+      and finally, we ship you very high quality order with our very high quality cargo partner SlowSnailNotExpress.
+      <br><br>
+      I've been coding this for six hours straight, now go buy smth.
+    </p>
+    <img style="object-fit: cover; min-width: 400px" src="https://i0.wp.com/lh3.googleusercontent.com/-QC_rA6e6rrQ/VlBphTFy4fI/AAAAAAAAbHY/9NuZu958adY/s600-Ic42/T-Shirt%252520Manufacturing.jpg?resize=600%2C416&ssl=1" alt="shirt manufacture">
+  </ArticleSection>
+
 </template>
 
 <style scoped>
