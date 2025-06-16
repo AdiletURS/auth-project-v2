@@ -37,7 +37,7 @@ const isActivePath = (currentPath) => {
       <li v-if="!hasAnyTokens()" id="link_login" class="small">
         <a @click="toggleAuth" href="#"><Icon icon="material-symbols:login-sharp"/></a>
 
-        <UnifiedAuthContainer v-if="showAuth" class="auth_dropdown">
+        <UnifiedAuthContainer v-if="showAuth" :close="() => showAuth = false" class="auth_dropdown">
           <SignInForm />
         </UnifiedAuthContainer>
       </li>

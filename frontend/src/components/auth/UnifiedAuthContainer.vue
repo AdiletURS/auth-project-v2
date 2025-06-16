@@ -1,5 +1,6 @@
 <script setup>
 import {reactive} from "vue";
+import { vOnClickOutside } from "@vueuse/components";
 import SignUpForm from "@/components/auth/SignUpForm.vue";
 import SignInForm from "@/components/auth/SignInForm.vue";
 
@@ -7,7 +8,8 @@ const props = defineProps({
   formType: {
     type: String,
     default: "sign-in"
-  }
+  },
+  close: Function
 });
 
 const state = reactive({
@@ -22,7 +24,7 @@ const setFormType = (type) => {
 </script>
 
 <template>
-  <div class="auth_container">
+  <div class="auth_container" v-on-click-outside="close">
     <h2 class="title">{{ state.title }}</h2>
     <div class="form_cont">
       <SignInForm :setForm="setFormType" v-if="state.formType === 'sign-in'"/>
