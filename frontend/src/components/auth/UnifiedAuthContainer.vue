@@ -26,7 +26,7 @@ const setFormType = (type) => {
     <h2 class="title">{{ state.title }}</h2>
     <div class="form_cont">
       <SignInForm :setForm="setFormType" v-if="state.formType === 'sign-in'"/>
-      <SignUpForm v-else />
+      <SignUpForm :setForm="setFormType" v-else />
     </div>
   </div>
 </template>

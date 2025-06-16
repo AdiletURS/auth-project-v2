@@ -1,6 +1,10 @@
 <script setup>
 import {ref} from "vue";
-import {register} from "../../../api/lib/auth.js";
+import {register} from "@/api/lib/auth.js";
+
+const props = defineProps({
+  setForm: Function
+});
 
 const username = ref("");
 const password = ref("");
@@ -8,21 +12,29 @@ const repeatPassword = ref("");
 const checkAgreed = ref(false);
 
 const isLoading = ref(false);
+const errorMsg = ref("");
 
 const submitForm = () => {
+  isLoading.value = true
+  errorMsg.value = "";
+
   const userObject = {
     login: username.value,
     password: password.value
   }
 
-  isLoading.value = true
   register(userObject)
       .then(res => {
         console.log(res)
         isLoading.value = false;
+
+        if (res.status === 201) {
+          props.setForm("sign-in");
+        }
       })
       .catch(err => {
         isLoading.value = false;
+        errorMsg.value = err.response.data.message;
       });
 }
 </script>
@@ -46,6 +58,8 @@ const submitForm = () => {
       <span v-if="!isLoading">sign up</span>
       <span v-else>loading</span>
     </button>
+
+    <span class="error_message">{{ errorMsg }}</span>
   </form>
 </template>
 
@@ -58,5 +72,10 @@ const submitForm = () => {
 
 .agreement label {
   width: 80%;
+}
+
+.error_message {
+  font-size: .6em;
+  color: darkred;
 }
 </style>

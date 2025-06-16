@@ -20,7 +20,7 @@ axiosClient.interceptors.response.use(
         if (res.status === 401) {
             router.push({path: "/"})
         }
-        console.error(res.status);
+        console.error(res.status, res.data);
 
         return Promise.reject(error);
     }
