@@ -1,23 +1,51 @@
 <script setup>
+import {ref} from "vue";
+import {register} from "../../../api/lib/auth.js";
 
+const username = ref("");
+const password = ref("");
+const repeatPassword = ref("");
+const checkAgreed = ref(false);
+
+const isLoading = ref(false);
+
+const submitForm = () => {
+  const userObject = {
+    login: username.value,
+    password: password.value
+  }
+
+  isLoading.value = true
+  register(userObject)
+      .then(res => {
+        console.log(res)
+        isLoading.value = false;
+      })
+      .catch(err => {
+        isLoading.value = false;
+      });
+}
 </script>
 
 <template>
-  <form @submit.prevent="">
+  <form @submit.prevent="submitForm">
     <label for="username">username</label>
-    <input type="text" id="username" name="username" placeholder="ur username">
+    <input v-model="username" type="text" id="username" name="username" placeholder="ur username">
 
     <label for="password">password</label>
-    <input type="password" id="password" name="password" placeholder="ur password">
-    <label for="password-r">password again</label>
-    <input type="password" id="password-r" name="password-r" placeholder="repeat ur password">
+    <input v-model="password" type="password" id="password" name="password" placeholder="ur password">
+    <label for="password_r">password again</label>
+    <input v-model="repeatPassword" type="password" id="password_r" name="password_r" placeholder="repeat ur password">
 
     <div class="agreement">
-      <input type="checkbox" id="agreement" name="agreement">
+      <input v-model="checkAgreed" type="checkbox" id="agreement" name="agreement">
       <label for="agreement">do you accept our <a href="#">terms of agreement</a>?</label>
     </div>
 
-    <button type="submit">sign up</button>
+    <button :disabled="isLoading" type="submit">
+      <span v-if="!isLoading">sign up</span>
+      <span v-else>loading</span>
+    </button>
   </form>
 </template>
 
@@ -27,6 +55,7 @@
   display: inline-block;
   vertical-align: middle;
 }
+
 .agreement label {
   width: 80%;
 }
