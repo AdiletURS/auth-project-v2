@@ -2,8 +2,8 @@
 import {Icon} from "@iconify/vue";
 import {ref} from "vue";
 import {useRoute} from "vue-router";
-import UnifiedAuthContainer from "@/components/auth/UnifiedAuthContainer.vue";
-import SignInForm from "@/components/auth/SignInForm.vue";
+import UnifiedAuthContainer from "@/components/auth_components/UnifiedAuthContainer.vue";
+import SignInForm from "@/components/auth_components/SignInForm.vue";
 import {hasAnyTokens} from "@/api/apiClient.js";
 
 const showAuth = ref(false);
@@ -31,8 +31,8 @@ const isActivePath = (currentPath) => {
     <button id="mobile_menu" @click="toggleDropdown"><Icon icon="material-symbols:menu" /></button>
 
     <ul v-show="showDropdown" class="links">
-      <li><RouterLink to="/" :class="isActivePath('/') ? 'active' : ''">HOME</RouterLink></li>
-      <li><RouterLink to="/shop" :class="isActivePath('/shop') ? 'active' : ''">SHOP</RouterLink></li>
+      <li @click="showDropdown = false"><RouterLink to="/" :class="isActivePath('/') ? 'active' : ''">HOME</RouterLink></li>
+      <li @click="showDropdown = false"><RouterLink to="/shop" :class="isActivePath('/shop') ? 'active' : ''">SHOP</RouterLink></li>
 
       <li v-if="!hasAnyTokens()" id="link_login" class="small">
         <a @click="toggleAuth" href="#"><Icon icon="material-symbols:login-sharp"/></a>
@@ -41,7 +41,7 @@ const isActivePath = (currentPath) => {
           <SignInForm />
         </UnifiedAuthContainer>
       </li>
-      <li v-else id="link_profile" class="small">
+      <li v-else @click="showDropdown = false" id="link_profile" class="small">
         <RouterLink to="/dash"><Icon icon="material-symbols:person" /></RouterLink>
       </li>
     </ul>
@@ -69,6 +69,7 @@ const isActivePath = (currentPath) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 10;
 
   border-bottom: 2px solid var(--color-secondary);
   background-color: var(--color-primary);

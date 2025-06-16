@@ -1,8 +1,8 @@
 <script setup>
 import {reactive} from "vue";
-import { vOnClickOutside } from "@vueuse/components";
-import SignUpForm from "@/components/auth/SignUpForm.vue";
-import SignInForm from "@/components/auth/SignInForm.vue";
+import {vOnClickOutside} from "@vueuse/components";
+import SignUpForm from "@/components/auth_components/SignUpForm.vue";
+import SignInForm from "@/components/auth_components/SignInForm.vue";
 
 const props = defineProps({
   formType: {

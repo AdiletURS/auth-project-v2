@@ -2,7 +2,7 @@
 import {Icon} from "@iconify/vue";
 import {ref} from "vue";
 import {register} from "@/api/services/auth.js";
-import TermsOfService from "@/components/auth/TermsOfService.vue";
+import TermsOfService from "@/components/auth_components/TermsOfService.vue";
 
 const props = defineProps({
   setForm: Function
