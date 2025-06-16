@@ -1,0 +1,92 @@
+<script setup>
+import {reactive} from "vue";
+import {vOnClickOutside} from "@vueuse/components";
+import SignUpForm from "@/components/auth_components/SignUpForm.vue";
+import SignInForm from "@/components/auth_components/SignInForm.vue";
+
+const props = defineProps({
+  formType: {
+    type: String,
+    default: "sign-in"
+  },
+  close: Function
+});
+
+const state = reactive({
+  title: props.formType.toUpperCase(),
+  formType: props.formType
+});
+
+const setFormType = (type) => {
+  state.formType = type;
+  state.title = type.toUpperCase();
+}
+</script>
+
+<template>
+  <div class="auth_container" v-on-click-outside="close">
+    <h2 class="title">{{ state.title }}</h2>
+    <div class="form_cont">
+      <SignInForm :setForm="setFormType" v-if="state.formType === 'sign-in'"/>
+      <SignUpForm :setForm="setFormType" v-else />
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.auth_container {
+  width: 500px;
+  padding: 24px;
+  position: relative;
+
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-secondary);
+}
+
+.title {
+  position: absolute;
+  bottom: 0;
+  left: -50px;
+
+  text-transform: uppercase;
+  writing-mode: tb-rl;
+  transform: rotate(180deg);
+}
+
+:deep(form) {
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  gap: 8px;
+
+  &:first-child {
+    margin-top: -12px;
+  }
+  button {
+    align-self: flex-end;
+    width: 50%;
+  }
+  span svg {
+    width: 32px;
+    height: 100%;
+  }
+}
+
+/* Phone */
+@media (max-width: 850px) {
+  .auth_container {
+    width: 100%;
+
+    border: none;
+    border-bottom: 2px solid var(--color-secondary);
+  }
+
+  .title {
+    position: static;
+    margin-bottom: 24px;
+
+    writing-mode: lr;
+    transform: none;
+  }
+}
+</style>

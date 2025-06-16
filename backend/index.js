@@ -1,6 +1,7 @@
 // backend/index.js
 require('dotenv').config();
 
+const cors = require('cors');
 const express = require('express');
 // Импортируем наш модуль для работы с БД
 const bcrypt = require('bcryptjs');
@@ -13,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 
 
 
-
+app.use(cors());
 app.use(express.json());
 
 // Простая асинхронная функция для проверки подключения к БД
