@@ -66,7 +66,7 @@ const submitForm = () => {
     <div class="buttons">
       <a @click="setForm('sign-up')" href="#">create account</a>
       <button :disabled="isLoading" type="submit">
-        <span v-if="!isLoading">sign up</span>
+        <span v-if="!isLoading">sign in</span>
         <span v-else><Icon icon="svg-spinners:bars-fade" /></span>
       </button>
     </div>

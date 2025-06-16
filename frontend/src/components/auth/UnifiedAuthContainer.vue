@@ -39,8 +39,6 @@ const setFormType = (type) => {
 
   background-color: var(--color-primary);
   border: 2px solid var(--color-secondary);
-  box-shadow: 0 0 100px var(--color-primary);
-
 }
 
 .title {

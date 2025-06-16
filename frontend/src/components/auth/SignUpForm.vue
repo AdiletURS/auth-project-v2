@@ -2,10 +2,13 @@
 import {Icon} from "@iconify/vue";
 import {ref} from "vue";
 import {register} from "@/api/services/auth.js";
+import TermsOfService from "@/components/auth/TermsOfService.vue";
 
 const props = defineProps({
   setForm: Function
 });
+
+const showTOS = ref(false);
 
 const username = ref("");
 const password = ref("");
@@ -44,6 +47,7 @@ const submitForm = () => {
 
         if (res.status === 201) {
           props.setForm("sign-in");
+          alert("Account was created. Please sign in.")
         }
       })
       .catch(err => {
@@ -71,7 +75,7 @@ const submitForm = () => {
 
     <div class="agreement">
       <input v-model="checkAgreed" type="checkbox" id="agreement" name="agreement">
-      <label for="agreement">do you accept our <a href="#">terms of agreement</a>?</label>
+      <label for="agreement">do you accept our <a href="#" @click="() => showTOS = true">terms of agreement</a>?</label>
     </div>
 
     <button :disabled="isLoading" type="submit">
@@ -80,6 +84,9 @@ const submitForm = () => {
     </button>
 
     <span class="error_message">{{ errorMsg }}</span>
+
+    <!--  ToS  -->
+    <TermsOfService v-if="showTOS" :close="() => showTOS = false" />
   </form>
 </template>
 
