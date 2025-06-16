@@ -1,10 +1,13 @@
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {login} from "@/api/lib/auth.js";
+import {useRoute, useRouter} from "vue-router";
 
 defineProps({
   setForm: Function
 })
+
+const router = useRouter();
 
 const username = ref("");
 const password = ref("");
@@ -28,11 +31,18 @@ const submitForm = () => {
           localStorage.setItem("accessToken", user.accessToken);
           localStorage.setItem("refreshToken", user.refreshToken);
           console.log("successfully logged in");
+
+          router.push({ path: "/dash" });
+          router.go(1);
         }
       })
       .catch(err => {
         isLoading.value = false;
-        errorMsg.value = err.response.data.message;
+
+        if (err.response.data) {
+          errorMsg.value = err.response.data.message;
+        }
+        console.error(err.message);
       });
 }
 </script>

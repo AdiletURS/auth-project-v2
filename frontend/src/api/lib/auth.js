@@ -8,6 +8,8 @@ const login = (user) => {
     return axiosClient.post("/login", JSON.stringify(user));
 }
 
-const refresh = ()
+const refresh = (refreshToken) => {
+    return axiosClient.post("/refresh", JSON.stringify({ refreshToken }));
+}
 
-export {register, login}
+export {register, login, refresh}

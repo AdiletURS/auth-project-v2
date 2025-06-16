@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import ShopView from "@/views/ShopView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
-import DashboradView from "@/views/DashboradView.vue";
+import DashboardView from "@/views/DashboardView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +20,7 @@ const router = createRouter({
         {
             path: "/dash",
             name: "dashboard",
-            component: DashboradView
+            component: DashboardView
         },
 
         {
