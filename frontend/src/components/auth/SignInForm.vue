@@ -1,21 +1,53 @@
 <script setup>
+import {ref} from "vue";
+import {login} from "@/api/lib/auth.js";
+
 defineProps({
   setForm: Function
 })
+
+const username = ref("");
+const password = ref("");
+
+const isLoading = ref(false);
+const errorMsg = ref("");
+
+const submitForm = () => {
+  isLoading.value = true;
+  errorMsg.value = "";
+
+  login({
+    login: username.value,
+    password: password.value
+  })
+      .then(res => {
+        isLoading.value = false;
+        if (res.status === 200) {
+          console.log(res.data);
+        }
+      })
+      .catch(err => {
+        isLoading.value = false;
+        errorMsg.value = err.response.data.message;
+      });
+}
 </script>
 
 <template>
-  <form @submit.prevent="">
+  <form @submit.prevent="submitForm">
     <label for="username">username</label>
-    <input type="text" id="username" name="username" placeholder="ur username">
+    <input v-model="username" type="text" id="username" name="username" placeholder="ur username">
 
     <label for="password">password</label>
-    <input type="password" id="password" name="password" placeholder="ur password">
+    <input v-model="password" type="password" id="password" name="password" placeholder="ur password">
 
     <div class="buttons">
       <a @click="setForm('sign-up')" href="#">create account</a>
-      <button type="submit">sign in</button>
+      <button :disabled="isLoading" type="submit">sign in</button>
     </div>
+
+    <!--  TODO: перенести в UnifiedAuthContainer  -->
+    <span class="error_message">{{ errorMsg }}</span>
   </form>
 </template>
 
@@ -28,5 +60,10 @@ defineProps({
   a {
     font-size: .6em;
   }
+}
+
+.error_message {
+  font-size: .6em;
+  color: darkred;
 }
 </style>

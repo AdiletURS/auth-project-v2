@@ -18,7 +18,8 @@ axiosClient.interceptors.response.use(
 
         const res = error.response;
         if (res.status === 401) {
-            router.push({path: "/"})
+            // router.push({path: "/"})
+            console.log("pizda")
         }
         console.error(res.status, res.data);
 
