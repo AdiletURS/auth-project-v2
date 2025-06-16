@@ -23,7 +23,11 @@ const submitForm = () => {
       .then(res => {
         isLoading.value = false;
         if (res.status === 200) {
-          console.log(res.data);
+          const user = res.data;
+
+          localStorage.setItem("accessToken", user.accessToken);
+          localStorage.setItem("refreshToken", user.refreshToken);
+          console.log("successfully logged in");
         }
       })
       .catch(err => {
