@@ -71,4 +71,22 @@ const setFormType = (type) => {
     height: 100%;
   }
 }
+
+/* Phone */
+@media (max-width: 850px) {
+  .auth_container {
+    width: 100%;
+
+    border: none;
+    border-bottom: 2px solid var(--color-secondary);
+  }
+
+  .title {
+    position: static;
+    margin-bottom: 24px;
+
+    writing-mode: lr;
+    transform: none;
+  }
+}
 </style>

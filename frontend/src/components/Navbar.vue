@@ -53,8 +53,10 @@ const isActivePath = (currentPath) => {
   margin-right: var(--padding-inline);
   position: fixed;
   right: 0;
-}
 
+  @media (max-width: 1200px) { margin-right: var(--padding-inline-tablet) }
+  @media (max-width: 850px) { margin-right: 0 }
+}
 
 .navbar {
   width: 100%;
@@ -210,8 +212,11 @@ a {
       }
       &:hover { text-decoration: underline }
     }
-    #link_login:after {
+    #link_login a:after {
       content: "LOGIN";
+    }
+    #link_profile a:after {
+      content: "PROFILE";
     }
   }
 }
