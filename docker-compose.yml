@@ -1,34 +1,47 @@
+# docker-compose.yml (НОВЫЙ, ПРАВИЛЬНЫЙ ВАРИАНТ)
 version: '3.8'
 
 services:
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: auth_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/services/postgresql/data
-
   backend:
-    build: ./backend
-    environment:
-      DB_HOST: db
-      DB_NAME: auth_db
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      ACCESS_TOKEN_SECRET: youraccesstokensecret
-      REFRESH_TOKEN_SECRET: yourrefreshtokensecret
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: auth_backend
     ports:
-      - "5000:5000"
-    depends_on:
-      - db
+      - "${PORT}:${PORT}" # Используем переменную из .env
+    # Указываем Docker Compose, что нужно прочитать .env файл
+    # и сделать его переменные доступными ВНУТРИ контейнера
+    environment:
+      - DB_HOST=postgres_db # Имя хоста БД, такое же как имя сервиса ниже
+      - DB_PORT=5432
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
 
+      - JWT_ACCESS_SECRET=my-super-secret-access-key-123
+      - JWT_REFRESH_SECRET=my-other-super-secret-refresh-key-456
+    env_file:
+      - .env
+    depends_on:
+      - postgres_db
+
+  postgres_db:
+    image: postgres:14-alpine
+    container_name: auth_postgres
+    environment:
+      # Здесь мы тоже используем переменные, которые Docker Compose прочитал из .env
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/db_init:/docker-entrypoint-initdb.d
+    ports:
+      - "5433:5432"
   frontend:
     build: ./frontend
+    container_name: auth_frontend
     ports:
       - "80:5173"
 volumes:
-  pgdata:
+  postgres_data:
