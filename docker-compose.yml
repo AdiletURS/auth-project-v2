@@ -12,14 +12,14 @@ services:
     # Указываем Docker Compose, что нужно прочитать .env файл
     # и сделать его переменные доступными ВНУТРИ контейнера
     environment:
-      - DB_HOST=postgres_db # Имя хоста БД, такое же как имя сервиса ниже
-      - DB_PORT=5432
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
+      DB_HOST: postgres_db # Имя хоста БД, такое же как имя сервиса ниже
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
 
-      - JWT_ACCESS_SECRET=my-super-secret-access-key-123
-      - JWT_REFRESH_SECRET=my-other-super-secret-refresh-key-456
+      JWT_ACCESS_SECRET: ${ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${REFRESH_SECRET}
     env_file:
       - .env
     depends_on:
