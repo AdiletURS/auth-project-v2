@@ -27,14 +27,16 @@ axiosClient.interceptors.response.use(
                 console.warn("got new tokens yipee", newTokens.data);
 
                 setNewTokens(newTokens.data);
-                await axiosClient.request(err.config);
+
+                console.log("retrying previous request", err.config);
+                return axiosClient(err.config);
             } catch (err) {
                 // Failed to refresh tokens, probably due to invalid refreshToken
-                console.error(err);
+                return Promise.reject(err);
             }
+        } else {
+            return Promise.reject(err);
         }
-
-        return Promise.reject(err);
     }
 );
 

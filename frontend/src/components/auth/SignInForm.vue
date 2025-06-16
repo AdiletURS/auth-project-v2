@@ -39,8 +39,10 @@ const submitForm = () => {
       .catch(err => {
         isLoading.value = false;
 
-        if (err.response.data) {
+        if (err.response && err.response.data) {
           errorMsg.value = err.response.data.message;
+        } else {
+          errorMsg.value = "Failed... Check console for stack trace."
         }
         console.error(err.message);
       });
