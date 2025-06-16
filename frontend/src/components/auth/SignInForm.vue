@@ -1,7 +1,8 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import {login} from "@/api/services/auth.js";
-import {useRoute, useRouter} from "vue-router";
+import {useRouter} from "vue-router";
+import {Icon} from "@iconify/vue";
 
 defineProps({
   setForm: Function
@@ -16,6 +17,11 @@ const isLoading = ref(false);
 const errorMsg = ref("");
 
 const submitForm = () => {
+  if (!username.value || !password.value) {
+    errorMsg.value = "Username/Password can't be empty.";
+    return;
+  }
+
   isLoading.value = true;
   errorMsg.value = "";
 
@@ -32,8 +38,8 @@ const submitForm = () => {
           localStorage.setItem("refreshToken", user.refreshToken);
           console.log("successfully logged in");
 
-          router.push({ path: "/dash" });
-          router.go(1);
+          router.push({ name: "dashboard"})
+              .then(() => router.go()); // redirects and reloads
         }
       })
       .catch(err => {
@@ -59,10 +65,12 @@ const submitForm = () => {
 
     <div class="buttons">
       <a @click="setForm('sign-up')" href="#">create account</a>
-      <button :disabled="isLoading" type="submit">sign in</button>
+      <button :disabled="isLoading" type="submit">
+        <span v-if="!isLoading">sign up</span>
+        <span v-else><Icon icon="svg-spinners:bars-fade" /></span>
+      </button>
     </div>
 
-    <!--  TODO: перенести в UnifiedAuthContainer  -->
     <span class="error_message">{{ errorMsg }}</span>
   </form>
 </template>

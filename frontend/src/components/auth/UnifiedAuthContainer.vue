@@ -66,5 +66,9 @@ const setFormType = (type) => {
     align-self: flex-end;
     width: 50%;
   }
+  span svg {
+    width: 32px;
+    height: 100%;
+  }
 }
 </style>

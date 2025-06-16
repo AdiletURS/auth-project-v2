@@ -1,5 +1,4 @@
 import axios from "axios";
-import {useRouter} from "vue-router";
 import {refresh} from "@/api/services/auth.js";
 
 const axiosClient = axios.create({
@@ -16,25 +15,29 @@ axiosClient.interceptors.response.use(
     },
     async (err) => {
         const status = err.response ? err.response.status : null;
+        const errMsg = status === 401 ? err.response.data.message : "";
 
-        if (status === 401) {
+        if (status === 401 && errMsg !== "Неверные учетные данные") {
             // Token has expired and has to be refreshed
             const refreshToken = localStorage.getItem("refreshToken");
 
             console.warn("getting new tokens...");
             try {
                 const newTokens = await refresh(refreshToken);
-                console.warn("got new tokens yipee", newTokens.data);
+                console.warn("got new tokens yipee", newTokens);
 
-                setNewTokens(newTokens.data);
+                setTokens(newTokens.data);
 
-                console.log("retrying previous request", err.config);
+                console.log("retrying previous request");
                 return axiosClient(err.config);
             } catch (err) {
                 // Failed to refresh tokens, probably due to invalid refreshToken
+                setTokens();
+                console.error("Failed getting new tokens, refreshToken may was invalid.");
                 return Promise.reject(err);
             }
         } else {
+            // Just reject the promise on any other status code
             return Promise.reject(err);
         }
     }
@@ -51,11 +54,23 @@ axiosClient.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-
-const setNewTokens = (data) => {
-    const {accessToken, refreshToken} = data;
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
+// Leaving empty data param will remove the tokens
+const setTokens = (data = null) => {
+    if (data) {
+        console.log("renew tokens");
+        const {accessToken, refreshToken} = data;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+    } else {
+        console.log("removed tokens");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+    }
 }
 
-export {axiosClient};
+const hasAnyTokens = () => {
+    return (localStorage.getItem("accessToken") ||
+        localStorage.getItem("refreshToken"));
+}
+
+export {axiosClient, setTokens, hasAnyTokens};

@@ -1,4 +1,5 @@
 <script setup>
+import {Icon} from "@iconify/vue";
 import {ref} from "vue";
 import {register} from "@/api/services/auth.js";
 
@@ -15,7 +16,20 @@ const isLoading = ref(false);
 const errorMsg = ref("");
 
 const submitForm = () => {
-  isLoading.value = true
+  if (!username.value || !password.value) {
+    errorMsg.value = "Username/Password can't be empty."
+    return;
+  }
+  if (password.value !== repeatPassword.value) {
+    errorMsg.value = "Passwords are not similar.";
+    return;
+  }
+  if (!checkAgreed.value) {
+    errorMsg.value = "You have to agree the ToS first.";
+    return;
+  }
+
+  isLoading.value = true;
   errorMsg.value = "";
 
   const userObject = {
@@ -62,7 +76,7 @@ const submitForm = () => {
 
     <button :disabled="isLoading" type="submit">
       <span v-if="!isLoading">sign up</span>
-      <span v-else>loading</span>
+      <span v-else><Icon icon="svg-spinners:bars-fade" /></span>
     </button>
 
     <span class="error_message">{{ errorMsg }}</span>
