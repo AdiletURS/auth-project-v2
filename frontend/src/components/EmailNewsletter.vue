@@ -23,6 +23,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (max-width: 850px) {
+    padding: var(--padding-inline-mobile);
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      button {
+        margin-left: 0 !important;
+      }
+    }
+  }
 }
 
 .title {
