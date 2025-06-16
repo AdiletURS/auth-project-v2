@@ -1,4 +1,5 @@
 // backend/index.js
+require('dotenv').config();
 
 const express = require('express');
 // Импортируем наш модуль для работы с БД
@@ -9,6 +10,9 @@ const authMiddleware = require('./authMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+
+
 
 app.use(express.json());
 
