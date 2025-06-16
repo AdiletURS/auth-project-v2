@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from "vue";
-import {register} from "@/api/lib/auth.js";
+import {register} from "@/api/services/auth.js";
 
 const props = defineProps({
   setForm: Function

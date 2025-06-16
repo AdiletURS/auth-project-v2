@@ -1,6 +1,6 @@
 <script setup>
 import {onMounted, reactive} from "vue";
-import {getProfile} from "@/api/lib/profile.js";
+import {getProfile} from "@/api/services/profile.js";
 
 const state = reactive({
   id: -1,

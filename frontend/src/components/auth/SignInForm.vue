@@ -1,6 +1,6 @@
 <script setup>
 import {onMounted, ref} from "vue";
-import {login} from "@/api/lib/auth.js";
+import {login} from "@/api/services/auth.js";
 import {useRoute, useRouter} from "vue-router";
 
 defineProps({
