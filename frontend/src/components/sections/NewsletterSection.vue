@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="newsletter">
+  <section class="newsletter">
     <div class="title">
       <h2>join our newsletter</h2>
       <p>be the first to know about new collections and exclusive offers.</p>
@@ -14,7 +14,7 @@
       <input type="email" id="name" name="name" placeholder="type ur email">
       <button style="margin-left: 4px" type="submit">subscribe</button>
     </form>
-  </div>
+  </section>
 </template>
 
 <style scoped>

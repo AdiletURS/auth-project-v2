@@ -1,8 +1,8 @@
 <script setup>
 import {onBeforeMount, ref} from "vue";
 import InfiniteScroll from "@/components/InfiniteScroll.vue";
-import ArticleSection from "@/components/ArticleSection.vue";
-import EmailNewsletter from "@/components/EmailNewsletter.vue";
+import ArticleSection from "@/components/sections/ArticleSection.vue";
+import NewsletterSection from "@/components/sections/NewsletterSection.vue";
 
 const introPhrases = [
   "the best shirts in za warudo",
@@ -65,7 +65,7 @@ onBeforeMount(() => {
     </ol>
   </ArticleSection>
 
-  <EmailNewsletter />
+  <NewsletterSection />
 </template>
 
 <style scoped>
