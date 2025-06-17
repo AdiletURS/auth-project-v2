@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="614e69d0-cc16-439f-a076-c9b64ca9fad5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/services/auth-service/seed.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/auth-service/swagger.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/todo-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/todo-service/authMiddleware.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/todo-service/db.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/todo-service/db_init/init.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/todo-service/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/auth-service/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/services/auth-service/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/auth-service/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/services/auth-service/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/auth-service/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/services/auth-service/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
