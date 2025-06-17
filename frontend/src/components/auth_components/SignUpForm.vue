@@ -17,7 +17,7 @@ const showTOS = ref(false);
 
 const username = ref("");
 watch(username, (username) => {
-  if (username)
+  // if (username)
 })
 
 const password = ref("");
