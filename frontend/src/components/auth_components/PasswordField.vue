@@ -8,8 +8,8 @@ const props = defineProps({
 })
 
 const isInvalid = ref(false);
-const setInvalid = (bool = false) => {
-  isInvalid.value = !isInvalid.value
+const setInvalid = (invalid = false) => {
+  isInvalid.value = invalid;
 }
 
 const emit = defineEmits(['update:modelValue']);
@@ -30,7 +30,8 @@ defineExpose({
   <div class="password_field">
     <label for="password">password</label>
     <input :value="modelValue" @input="handleInput" :type="fieldType" id="password" name="password"
-           :placeholder="placeholder">
+           :placeholder="placeholder"
+           :class="isInvalid ? 'invalid' : ''">
     <button @click="switchVisibility" type="button" class="toggle">
       <Icon v-if="fieldType === 'password'" icon="material-symbols:visibility-outline"/>
       <Icon v-else icon="material-symbols:visibility-off-outline"/>
@@ -51,6 +52,7 @@ defineExpose({
 
 .invalid {
   border-color: var(--color-invalid);
+
   &:focus {
     box-shadow: inset 0 0 0 1px var(--color-invalid);
   }

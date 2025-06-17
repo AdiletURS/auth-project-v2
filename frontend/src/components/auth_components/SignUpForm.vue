@@ -76,18 +76,18 @@ onMounted(() => {
 
     // Password length
     if (password.value.length < 6) {
-      inputPass.value.setBorderColor("red");
+      inputPass.value.setInvalid(true);
       validationErrors.value.push("Password is too short.")
     } else {
-      inputPass.value.setBorderColor();
+      inputPass.value.setInvalid(false);
     }
 
     // Password similarity
     if (password.value !== repeatPassword.value) {
-      inputPassRep.value.setBorderColor("red");
+      inputPassRep.value.setInvalid(true)
       validationErrors.value.push("Passwords are not similar.")
     } else {
-      inputPassRep.value.setBorderColor();
+      inputPassRep.value.setInvalid(false);
     }
     // ToS check presence
     if (!checkAgreed.value) {
