@@ -3,6 +3,7 @@ import {Icon} from "@iconify/vue";
 import {onMounted, ref, useTemplateRef, watchEffect} from "vue";
 import {register} from "@/api/services/auth.js";
 import TermsOfService from "@/components/auth_components/TermsOfService.vue";
+import PasswordField from "@/components/auth_components/PasswordField.vue";
 
 const props = defineProps({
   setForm: Function
@@ -70,7 +71,7 @@ onMounted(() => {
     } else inputName.value.style = "border-color: var(--color-secondary)";
 
     // Password length
-    if (password.value.length < 6) {
+    /*if (password.value.length < 6) {
       inputPass.value.style = "border-color: red"
       validationErrors.value.push("Password is too short.")
     } else {
@@ -84,7 +85,7 @@ onMounted(() => {
     } else {
       inputPassRep.value.style = "border-color: var(--color-secondary)"
     }
-
+*/
     // ToS check presence
     if (!checkAgreed.value) {
       validationErrors.value.push("You have to agree with the ToS.")
@@ -98,14 +99,7 @@ onMounted(() => {
     <label for="username">username</label>
     <input v-model="username" ref="i-name" type="text" id="username" name="username" placeholder="ur username">
 
-    <div class="password_field">
-      <label for="password">password</label>
-      <input v-model="password" ref="i-pass" type="password" id="password" name="password" placeholder="ur password">
-      <button>
-        <Icon icon="material-symbols:visibility-outline" />
-        <Icon icon="material-symbols:visibility-off-outline" />
-      </button>
-    </div>
+    <PasswordField v-model="password" />
     <div class="password_field">
       <label for="password_r">password again</label>
       <input v-model="repeatPassword" ref="i-pass-r" type="password" id="password_r" name="password_r" placeholder="repeat ur password">
