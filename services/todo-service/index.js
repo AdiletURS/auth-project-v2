@@ -3,16 +3,26 @@ require('dotenv').config();
 const express = require('express');
 const db = require('./db');
 const authMiddleware = require('./authMiddleware');
+const logger = require('./logger');
+
+const Joi = require('joi');
+const validationMiddleware = require('./validationMiddleware');
 
 const app = express();
 const PORT = process.env.TODO_SERVICE_PORT || 3001;
 app.use(express.json());
 
+// Схемы валидации для ToDo Service
+const todoSchema = Joi.object({
+    title: Joi.string().min(1).required(),
+    completed: Joi.boolean().optional(), // optional() делает поле необязательным
+});
+
 // Все маршруты ниже будут защищены. Сначала сработает authMiddleware.
 app.use('/api/todos', authMiddleware);
 
 // CREATE: Создать новую задачу
-app.post('/api/todos', async (req, res) => {
+app.post('/api/todos', validationMiddleware(todoSchema), async (req, res) => {
     const { title } = req.body;
     const userId = req.user.id; // ID пользователя мы берем из токена!
 
@@ -31,6 +41,12 @@ app.post('/api/todos', async (req, res) => {
     }
 });
 
+// При обновлении title не обязателен, если мы хотим поменять только completed
+const updateTodoSchema = Joi.object({
+    title: Joi.string().min(1),
+    completed: Joi.boolean()
+});
+
 // READ: Получить все задачи пользователя
 app.get('/api/todos', async (req, res) => {
     const userId = req.user.id;
@@ -43,7 +59,7 @@ app.get('/api/todos', async (req, res) => {
 });
 
 // UPDATE: Обновить задачу
-app.put('/api/todos/:id', async (req, res) => {
+app.put('/api/todos/:id',  validationMiddleware(updateTodoSchema), async (req, res) => {
     const todoId = req.params.id;
     const userId = req.user.id;
     const { title, completed } = req.body;
@@ -82,5 +98,5 @@ app.delete('/api/todos/:id', async (req, res) => {
 
 
 app.listen(PORT, () => {
-    console.log(`ToDo-сервис запущен на порту ${PORT}`);
+    logger.info(`ToDo-сервис запущен на порту ${PORT}`);
 });

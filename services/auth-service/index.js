@@ -8,21 +8,34 @@ const db = require('./db');
 const jwt = require('jsonwebtoken');
 const authMiddleware = require('./authMiddleware');
 
+const Joi = require('joi');
+const validationMiddleware = require('./validationMiddleware');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+const logger = require('./logger');
 setupSwagger(app);
 
 app.use(express.json());
+
+const registerSchema = Joi.object({
+    login: Joi.string().min(3).max(30).required(),
+    password: Joi.string().min(6).required(),
+});
+
+const loginSchema = Joi.object({
+    login: Joi.string().required(),
+    password: Joi.string().required(),
+});
 
 // Простая асинхронная функция для проверки подключения к БД
 const checkDbConnection = async () => {
     try {
         // Выполняем простой запрос, чтобы проверить, что соединение установлено
         const result = await db.query('SELECT NOW()');
-        console.log('Подключение к базе данных успешно! Текущее время в БД:', result.rows[0].now);
+        logger.info('Подключение к базе данных успешно! Текущее время в БД:', result.rows[0].now);
     } catch (error) {
-        console.error('Ошибка подключения к базе данных:', error);
+        logger.info('Ошибка подключения к базе данных:', error);
         // Если не удалось подключиться, завершаем работу приложения, т.к. без БД оно бесполезно
         process.exit(1);
     }
@@ -62,7 +75,7 @@ app.get('/api/profile', authMiddleware, async (req, res) => {
         res.json(userResult.rows[0]);
 
     } catch (error) {
-        console.error('Ошибка при получении профиля:', error);
+        logger.info('Ошибка при получении профиля:', error);
         res.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
 });
@@ -96,7 +109,7 @@ app.get('/api/profile', authMiddleware, async (req, res) => {
  *         description: Пользователь с таким логином уже существует
  */
 // --- НАШ НОВЫЙ ENDPOINT РЕГИСТРАЦИИ ---
-app.post('/api/register', async (req, res) => {
+app.post('/api/register',  validationMiddleware(registerSchema), async (req, res) => {
     try {
         const { login, password } = req.body;
 
@@ -127,7 +140,7 @@ app.post('/api/register', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Ошибка при регистрации:', error);
+        logger.info('Ошибка при регистрации:', error);
         res.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
 });
@@ -161,7 +174,7 @@ app.post('/api/register', async (req, res) => {
  *         description: Неверные учетные данные
  */
 // --- НАШ НОВЫЙ ENDPOINT ВХОДА ---
-app.post('/api/login', async (req, res) => {
+app.post('/api/login', validationMiddleware(loginSchema), async (req, res) => {
     try {
         const { login, password } = req.body;
         if (!login || !password) {
@@ -205,7 +218,7 @@ app.post('/api/login', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Ошибка при входе:', error);
+        logger.info('Ошибка при входе:', error);
         res.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
 });
@@ -280,7 +293,7 @@ app.post('/api/refresh', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Ошибка при обновлении токена:', error);
+        logger.info('Ошибка при обновлении токена:', error);
         res.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
 });
@@ -289,7 +302,7 @@ app.post('/api/refresh', async (req, res) => {
 const startServer = async () => {
     await checkDbConnection();
     app.listen(PORT, () => {
-        console.log(`Сервер успешно запущен на порту ${PORT}`);
+        logger.info(`Сервер успешно запущен на порту ${PORT}`);
     });
 };
 
