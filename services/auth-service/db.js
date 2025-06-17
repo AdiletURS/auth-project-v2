@@ -1,4 +1,4 @@
-// backend/db.js
+// auth-service/db.js
 
 // Импортируем класс Pool из библиотеки pg
 const { Pool } = require('pg');

@@ -1,4 +1,4 @@
--- backend/db_init/init.sql
+-- auth-service/db_init/init.sql
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     login VARCHAR(255) UNIQUE NOT NULL,

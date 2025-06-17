@@ -1,4 +1,4 @@
-// backend/index.js
+// auth-service/index.js
 require('dotenv').config();
 
 const express = require('express');

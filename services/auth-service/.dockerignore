@@ -1,0 +1,3 @@
+# .dockerignore в папке /auth-service
+node_modules
+.env

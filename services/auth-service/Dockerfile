@@ -1,4 +1,4 @@
-# Dockerfile в папке /backend
+# Dockerfile в папке /auth-service
 
 # 1. Выбираем базовый образ. Мы берем официальный образ Node.js версии 18.
 FROM node:18-alpine
