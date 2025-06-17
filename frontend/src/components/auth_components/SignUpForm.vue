@@ -71,21 +71,20 @@ onMounted(() => {
     } else inputName.value.style = "border-color: var(--color-secondary)";
 
     // Password length
-    /*if (password.value.length < 6) {
-      inputPass.value.style = "border-color: red"
+    if (password.value.length < 6) {
+      inputPass.value.setBorderColor("red");
       validationErrors.value.push("Password is too short.")
     } else {
-      inputPass.value.style = "border-color: var(--color-secondary)"
+      inputPass.value.setBorderColor();
     }
 
     // Password similarity
     if (password.value !== repeatPassword.value) {
-      inputPassRep.value.style = "border-color: red"
+      inputPassRep.value.setBorderColor("red");
       validationErrors.value.push("Passwords are not similar.")
     } else {
-      inputPassRep.value.style = "border-color: var(--color-secondary)"
+      inputPassRep.value.setBorderColor();
     }
-*/
     // ToS check presence
     if (!checkAgreed.value) {
       validationErrors.value.push("You have to agree with the ToS.")
@@ -99,11 +98,8 @@ onMounted(() => {
     <label for="username">username</label>
     <input v-model="username" ref="i-name" type="text" id="username" name="username" placeholder="ur username">
 
-    <PasswordField v-model="password" />
-    <div class="password_field">
-      <label for="password_r">password again</label>
-      <input v-model="repeatPassword" ref="i-pass-r" type="password" id="password_r" name="password_r" placeholder="repeat ur password">
-    </div>
+    <PasswordField ref="i-pass" v-model="password" />
+    <PasswordField ref="i-pass-r" v-model="repeatPassword" />
 
     <div class="agreement">
       <input v-model="checkAgreed" type="checkbox" id="agreement" name="agreement">
