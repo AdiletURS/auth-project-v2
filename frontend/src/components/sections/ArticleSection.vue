@@ -26,17 +26,11 @@ defineProps({
 </template>
 
 <style scoped>
-.container {
-  margin-top: 64px;
-}
-
 .title {
-  margin-left: 32px;
+  margin-bottom: 24px;
   display: flex;
   align-content: center;
   gap: 24px;
-
-  margin-bottom: 24px;
 
   span {
     display: flex;
@@ -64,5 +58,14 @@ defineProps({
   @media (max-width: 850px) {
     flex-direction: column;
   }
+}
+
+:deep(img) {
+  flex: 1;
+  max-height: 400px;
+}
+:deep(p),
+:deep(ul) {
+  flex: 2;
 }
 </style>

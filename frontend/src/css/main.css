@@ -65,6 +65,7 @@ input[type="checkbox"] {
 label {
     margin-left: 6px;
     font-size: .8em;
+    text-align: left;
     user-select: none;
 }
 
@@ -77,4 +78,10 @@ a {
     &:hover {
         filter: none;
     }
+}
+
+hr {
+    margin: 48px 20%;
+    border: none;
+    border-top: 1px solid var(--color-separator);
 }

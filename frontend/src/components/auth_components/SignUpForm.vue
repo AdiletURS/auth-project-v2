@@ -98,10 +98,18 @@ onMounted(() => {
     <label for="username">username</label>
     <input v-model="username" ref="i-name" type="text" id="username" name="username" placeholder="ur username">
 
-    <label for="password">password</label>
-    <input v-model="password" ref="i-pass" type="password" id="password" name="password" placeholder="ur password">
-    <label for="password_r">password again</label>
-    <input v-model="repeatPassword" ref="i-pass-r" type="password" id="password_r" name="password_r" placeholder="repeat ur password">
+    <div class="password_field">
+      <label for="password">password</label>
+      <input v-model="password" ref="i-pass" type="password" id="password" name="password" placeholder="ur password">
+      <button>
+        <Icon icon="material-symbols:visibility-outline" />
+        <Icon icon="material-symbols:visibility-off-outline" />
+      </button>
+    </div>
+    <div class="password_field">
+      <label for="password_r">password again</label>
+      <input v-model="repeatPassword" ref="i-pass-r" type="password" id="password_r" name="password_r" placeholder="repeat ur password">
+    </div>
 
     <div class="agreement">
       <input v-model="checkAgreed" type="checkbox" id="agreement" name="agreement">
