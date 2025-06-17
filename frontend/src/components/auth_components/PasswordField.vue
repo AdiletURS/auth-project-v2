@@ -3,12 +3,14 @@ import {Icon} from "@iconify/vue";
 import {ref} from "vue";
 
 const props = defineProps({
-  modelValue: String
+  modelValue: String,
+  placeholder: String
 })
 
-const borderColor = ref("");
-const setBorderColor = (color = "var(--color-secondary)") =>
-    borderColor.value = color
+const isInvalid = ref(false);
+const setInvalid = (bool = false) => {
+  isInvalid.value = !isInvalid.value
+}
 
 const emit = defineEmits(['update:modelValue']);
 const handleInput = (event) => {
@@ -20,16 +22,15 @@ const switchVisibility = () =>
     fieldType.value = fieldType.value === "password" ? "text" : "password";
 
 defineExpose({
-  setBorderColor
+  setInvalid
 });
 </script>
 
 <template>
   <div class="password_field">
     <label for="password">password</label>
-    <input :value="modelValue" @input="handleInput" ref="i-pass" :type="fieldType" id="password" name="password"
-           placeholder="ur password"
-           :style="`border-color: ${borderColor}`">
+    <input :value="modelValue" @input="handleInput" :type="fieldType" id="password" name="password"
+           :placeholder="placeholder">
     <button @click="switchVisibility" type="button" class="toggle">
       <Icon v-if="fieldType === 'password'" icon="material-symbols:visibility-outline"/>
       <Icon v-else icon="material-symbols:visibility-off-outline"/>
@@ -42,6 +43,17 @@ defineExpose({
   position: relative;
   display: flex;
   flex-direction: column;
+
+  input {
+    margin-right: 55px;
+  }
+}
+
+.invalid {
+  border-color: var(--color-invalid);
+  &:focus {
+    box-shadow: inset 0 0 0 1px var(--color-invalid);
+  }
 }
 
 .toggle {

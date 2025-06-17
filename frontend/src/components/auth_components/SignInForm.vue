@@ -3,6 +3,7 @@ import {ref} from "vue";
 import {login} from "@/api/services/auth.js";
 import {useRouter} from "vue-router";
 import {Icon} from "@iconify/vue";
+import PasswordField from "@/components/auth_components/PasswordField.vue";
 
 defineProps({
   setForm: Function
@@ -60,8 +61,7 @@ const submitForm = () => {
     <label for="username">username</label>
     <input v-model="username" type="text" id="username" name="username" placeholder="ur username">
 
-    <label for="password">password</label>
-    <input v-model="password" type="password" id="password" name="password" placeholder="ur password">
+    <PasswordField v-model="password" />
 
     <div class="buttons">
       <a @click="setForm('sign-up')" href="#">create account</a>

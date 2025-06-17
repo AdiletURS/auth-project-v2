@@ -1,6 +1,6 @@
 <script setup>
 import {Icon} from "@iconify/vue";
-import {onMounted, ref, useTemplateRef, watchEffect} from "vue";
+import {onMounted, watch, ref, useTemplateRef, watchEffect} from "vue";
 import {register} from "@/api/services/auth.js";
 import TermsOfService from "@/components/auth_components/TermsOfService.vue";
 import PasswordField from "@/components/auth_components/PasswordField.vue";
@@ -16,6 +16,10 @@ const inputPassRep = useTemplateRef("i-pass-r");
 const showTOS = ref(false);
 
 const username = ref("");
+watch(username, (username) => {
+  if (username)
+})
+
 const password = ref("");
 const repeatPassword = ref("");
 const checkAgreed = ref(false);
@@ -63,7 +67,7 @@ onMounted(() => {
   watchEffect(() => {
     // todo: надо бы в composable запихать, но мне лень.
     validationErrors.value = [];
-
+    const is_valid = true
     // Username presence
     if (!username.value) {
       inputName.value.style = "border-color: red";
