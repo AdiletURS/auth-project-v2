@@ -19,6 +19,12 @@ button {
     &:active {
         transform: translateY(2px);
     }
+    &:disabled {
+        filter: opacity(.5);
+
+        box-shadow: none !important;
+        transform: none !important;
+    }
 }
 
 input {

@@ -1,12 +1,16 @@
 <script setup>
 import {Icon} from "@iconify/vue";
-import {ref} from "vue";
+import {onMounted, ref, useTemplateRef, watchEffect} from "vue";
 import {register} from "@/api/services/auth.js";
 import TermsOfService from "@/components/auth_components/TermsOfService.vue";
 
 const props = defineProps({
   setForm: Function
 });
+
+const inputName = useTemplateRef("i-name");
+const inputPass = useTemplateRef("i-pass");
+const inputPassRep = useTemplateRef("i-pass-r");
 
 const showTOS = ref(false);
 
@@ -16,24 +20,16 @@ const repeatPassword = ref("");
 const checkAgreed = ref(false);
 
 const isLoading = ref(false);
-const errorMsg = ref("");
+const serverError = ref("");
+const validationErrors = ref([]);
 
 const submitForm = () => {
-  if (!username.value || !password.value) {
-    errorMsg.value = "Username/Password can't be empty."
-    return;
-  }
-  if (password.value !== repeatPassword.value) {
-    errorMsg.value = "Passwords are not similar.";
-    return;
-  }
-  if (!checkAgreed.value) {
-    errorMsg.value = "You have to agree the ToS first.";
+  if (validationErrors.value.length !== 0) {
+    console.warn("there are failed validations...")
     return;
   }
 
   isLoading.value = true;
-  errorMsg.value = "";
 
   const userObject = {
     login: username.value,
@@ -54,39 +50,74 @@ const submitForm = () => {
         isLoading.value = false;
 
         if (err.response && err.response.data) {
-          errorMsg.value = err.response.data.message;
+          serverError.value = err.response.data.message;
         } else {
-          errorMsg.value = "Failed... Check console for stack trace."
+          serverError.value = "Failed... Check console for stack trace."
         }
         console.error(err.message);
       });
 }
+
+onMounted(() => {
+  watchEffect(() => {
+    // todo: надо бы в composable запихать, но мне лень.
+    validationErrors.value = [];
+
+    // Username presence
+    if (!username.value) {
+      inputName.value.style = "border-color: red";
+      validationErrors.value.push("Username can't be empty.");
+    } else inputName.value.style = "border-color: var(--color-secondary)";
+
+    // Password length
+    if (password.value.length < 6) {
+      inputPass.value.style = "border-color: red"
+      validationErrors.value.push("Password is too short.")
+    } else {
+      inputPass.value.style = "border-color: var(--color-secondary)"
+    }
+
+    // Password similarity
+    if (password.value !== repeatPassword.value) {
+      inputPassRep.value.style = "border-color: red"
+      validationErrors.value.push("Passwords are not similar.")
+    } else {
+      inputPassRep.value.style = "border-color: var(--color-secondary)"
+    }
+
+    // ToS check presence
+    if (!checkAgreed.value) {
+      validationErrors.value.push("You have to agree with the ToS.")
+    }
+  });
+})
 </script>
 
 <template>
   <form @submit.prevent="submitForm">
     <label for="username">username</label>
-    <input v-model="username" type="text" id="username" name="username" placeholder="ur username">
+    <input v-model="username" ref="i-name" type="text" id="username" name="username" placeholder="ur username">
 
     <label for="password">password</label>
-    <input v-model="password" type="password" id="password" name="password" placeholder="ur password">
+    <input v-model="password" ref="i-pass" type="password" id="password" name="password" placeholder="ur password">
     <label for="password_r">password again</label>
-    <input v-model="repeatPassword" type="password" id="password_r" name="password_r" placeholder="repeat ur password">
+    <input v-model="repeatPassword" ref="i-pass-r" type="password" id="password_r" name="password_r" placeholder="repeat ur password">
 
     <div class="agreement">
       <input v-model="checkAgreed" type="checkbox" id="agreement" name="agreement">
-      <label for="agreement">do you accept our <a href="#" @click="() => showTOS = true">terms of agreement</a>?</label>
+      <label for="agreement">do you accept our <a href="#" @click="showTOS = true">terms of agreement</a>?</label>
     </div>
 
-    <button :disabled="isLoading" type="submit">
+    <button :disabled="isLoading || validationErrors.length !== 0" type="submit">
       <span v-if="!isLoading">sign up</span>
       <span v-else><Icon icon="svg-spinners:bars-fade" /></span>
     </button>
 
-    <span class="error_message">{{ errorMsg }}</span>
+    <span v-for="err in validationErrors" class="error_message">{{ err }}</span>
+    <span class="error_message">{{ serverError }}</span>
 
     <!--  ToS  -->
-    <TermsOfService v-if="showTOS" :close="() => showTOS = false" />
+    <TermsOfService v-if="showTOS" :close="showTOS = false" />
   </form>
 </template>
 
