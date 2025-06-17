@@ -1,0 +1,44 @@
+/* JetBrains Mono font */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap'); /* semantic color variables for this project */
+
+:root {
+    --color-primary: #FFF;
+    --color-secondary: #000;
+    --color-shadow: rgba(0, 0, 0, 0.2);
+
+    --color-select: #a0a0a0;
+    --color-invalid: #ff6363;
+
+    --color-separator: rgba(0, 0, 0, 0.3);
+
+    --padding-inline: 200px;
+    --padding-inline-tablet: 50px;
+    --padding-inline-mobile: 10px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    background: var(--color-primary);
+
+    font-family: "JetBrains Mono", monospace;
+    font-size: 32px;
+    font-weight: 300;
+
+    color: black;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Phone */
+@media (max-width: 850px) {
+    body {
+        font-size: 20px;
+    }
+}

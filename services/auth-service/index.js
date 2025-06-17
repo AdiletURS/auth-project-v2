@@ -1,41 +1,29 @@
+// backend/index.js
 require('dotenv').config();
 
 const express = require('express');
-const setupSwagger = require('./swagger');
 // Импортируем наш модуль для работы с БД
 const bcrypt = require('bcryptjs');
 const db = require('./db');
 const jwt = require('jsonwebtoken');
 const authMiddleware = require('./authMiddleware');
 
-const Joi = require('joi');
-const validationMiddleware = require('./validationMiddleware');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
-const logger = require('./logger');
-setupSwagger(app);
+
+
+
 
 app.use(express.json());
-
-const registerSchema = Joi.object({
-    login: Joi.string().min(3).max(30).required(),
-    password: Joi.string().min(6).required(),
-});
-
-const loginSchema = Joi.object({
-    login: Joi.string().required(),
-    password: Joi.string().required(),
-});
 
 // Простая асинхронная функция для проверки подключения к БД
 const checkDbConnection = async () => {
     try {
         // Выполняем простой запрос, чтобы проверить, что соединение установлено
         const result = await db.query('SELECT NOW()');
-        logger.info('Подключение к базе данных успешно! Текущее время в БД:', result.rows[0].now);
+        console.log('Подключение к базе данных успешно! Текущее время в БД:', result.rows[0].now);
     } catch (error) {
-        logger.info('Ошибка подключения к базе данных:', error);
+        console.error('Ошибка подключения к базе данных:', error);
         // Если не удалось подключиться, завершаем работу приложения, т.к. без БД оно бесполезно
         process.exit(1);
     }
@@ -45,20 +33,6 @@ app.get('/', (req, res) => {
     res.send('Бэкенд для системы авторизации работает!');
 });
 
-/**
- * @swagger
- * /api/profile:
- *   get:
- *     summary: Получение профиля пользователя
- *     tags: [Auth]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Данные профиля пользователя
- *       401:
- *         description: Пользователь не авторизован
- */
 // --- НАШ НОВЫЙ ЗАЩИЩЕННЫЙ МАРШРУТ ---
 app.get('/api/profile', authMiddleware, async (req, res) => {
     try {
@@ -75,41 +49,13 @@ app.get('/api/profile', authMiddleware, async (req, res) => {
         res.json(userResult.rows[0]);
 
     } catch (error) {
-        logger.info('Ошибка при получении профиля:', error);
+        console.error('Ошибка при получении профиля:', error);
         res.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
 });
 
-/**
- * @swagger
- * /api/register:
- *   post:
- *     summary: Регистрация нового пользователя
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - login
- *               - password
- *             properties:
- *               login:
- *                 type: string
- *                 example: user1
- *               password:
- *                 type: string
- *                 example: password123
- *     responses:
- *       201:
- *         description: Пользователь успешно зарегистрирован
- *       409:
- *         description: Пользователь с таким логином уже существует
- */
 // --- НАШ НОВЫЙ ENDPOINT РЕГИСТРАЦИИ ---
-app.post('/api/register',  validationMiddleware(registerSchema), async (req, res) => {
+app.post('/api/register', async (req, res) => {
     try {
         const { login, password } = req.body;
 
@@ -140,41 +86,14 @@ app.post('/api/register',  validationMiddleware(registerSchema), async (req, res
         });
 
     } catch (error) {
-        logger.info('Ошибка при регистрации:', error);
+        console.error('Ошибка при регистрации:', error);
         res.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
 });
 
-/**
- * @swagger
- * /api/login:
- *   post:
- *     summary: Авторизация пользователя
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - login
- *               - password
- *             properties:
- *               login:
- *                 type: string
- *                 example: user1
- *               password:
- *                 type: string
- *                 example: password123
- *     responses:
- *       200:
- *         description: Успешный вход, возвращает access и refresh токены
- *       401:
- *         description: Неверные учетные данные
- */
+
 // --- НАШ НОВЫЙ ENDPOINT ВХОДА ---
-app.post('/api/login', validationMiddleware(loginSchema), async (req, res) => {
+app.post('/api/login', async (req, res) => {
     try {
         const { login, password } = req.body;
         if (!login || !password) {
@@ -201,7 +120,7 @@ app.post('/api/login', validationMiddleware(loginSchema), async (req, res) => {
         const accessToken = jwt.sign(
             payload,
             process.env.JWT_ACCESS_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '10m' } // 10 минут
         );
 
         const refreshToken = jwt.sign(
@@ -218,35 +137,12 @@ app.post('/api/login', validationMiddleware(loginSchema), async (req, res) => {
         });
 
     } catch (error) {
-        logger.info('Ошибка при входе:', error);
+        console.error('Ошибка при входе:', error);
         res.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
 });
 
-/**
- * @swagger
- * /api/refresh:
- *   post:
- *     summary: Обновление access токена
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - refreshToken
- *             properties:
- *               refreshToken:
- *                 type: string
- *                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
- *     responses:
- *       200:
- *         description: Новый access токен выдан
- *       403:
- *         description: Неверный или просроченный refresh токен
- */
+
 // --- НАШ НОВЫЙ ENDPOINT ОБНОВЛЕНИЯ ТОКЕНА ---
 app.post('/api/refresh', async (req, res) => {
     try {
@@ -277,7 +173,7 @@ app.post('/api/refresh', async (req, res) => {
         const newAccessToken = jwt.sign(
             payload,
             process.env.JWT_ACCESS_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '10m' }
         );
 
         const newRefreshToken = jwt.sign(
@@ -293,7 +189,7 @@ app.post('/api/refresh', async (req, res) => {
         });
 
     } catch (error) {
-        logger.info('Ошибка при обновлении токена:', error);
+        console.error('Ошибка при обновлении токена:', error);
         res.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
 });
@@ -302,7 +198,7 @@ app.post('/api/refresh', async (req, res) => {
 const startServer = async () => {
     await checkDbConnection();
     app.listen(PORT, () => {
-        logger.info(`Сервер успешно запущен на порту ${PORT}`);
+        console.log(`Сервер успешно запущен на порту ${PORT}`);
     });
 };
 
