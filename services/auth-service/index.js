@@ -1,7 +1,7 @@
-// auth-service/index.js
 require('dotenv').config();
 
 const express = require('express');
+const setupSwagger = require('./swagger');
 // Импортируем наш модуль для работы с БД
 const bcrypt = require('bcryptjs');
 const db = require('./db');
@@ -11,8 +11,7 @@ const authMiddleware = require('./authMiddleware');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
-
+setupSwagger(app);
 
 app.use(express.json());
 
@@ -33,6 +32,20 @@ app.get('/', (req, res) => {
     res.send('Бэкенд для системы авторизации работает!');
 });
 
+/**
+ * @swagger
+ * /api/profile:
+ *   get:
+ *     summary: Получение профиля пользователя
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Данные профиля пользователя
+ *       401:
+ *         description: Пользователь не авторизован
+ */
 // --- НАШ НОВЫЙ ЗАЩИЩЕННЫЙ МАРШРУТ ---
 app.get('/api/profile', authMiddleware, async (req, res) => {
     try {
@@ -54,6 +67,34 @@ app.get('/api/profile', authMiddleware, async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/register:
+ *   post:
+ *     summary: Регистрация нового пользователя
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - login
+ *               - password
+ *             properties:
+ *               login:
+ *                 type: string
+ *                 example: user1
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       201:
+ *         description: Пользователь успешно зарегистрирован
+ *       409:
+ *         description: Пользователь с таким логином уже существует
+ */
 // --- НАШ НОВЫЙ ENDPOINT РЕГИСТРАЦИИ ---
 app.post('/api/register', async (req, res) => {
     try {
@@ -91,7 +132,34 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: Авторизация пользователя
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - login
+ *               - password
+ *             properties:
+ *               login:
+ *                 type: string
+ *                 example: user1
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Успешный вход, возвращает access и refresh токены
+ *       401:
+ *         description: Неверные учетные данные
+ */
 // --- НАШ НОВЫЙ ENDPOINT ВХОДА ---
 app.post('/api/login', async (req, res) => {
     try {
@@ -120,7 +188,7 @@ app.post('/api/login', async (req, res) => {
         const accessToken = jwt.sign(
             payload,
             process.env.JWT_ACCESS_SECRET,
-            { expiresIn: '10m' } // 10 минут
+            { expiresIn: '1h' }
         );
 
         const refreshToken = jwt.sign(
@@ -142,7 +210,30 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-
+/**
+ * @swagger
+ * /api/refresh:
+ *   post:
+ *     summary: Обновление access токена
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *     responses:
+ *       200:
+ *         description: Новый access токен выдан
+ *       403:
+ *         description: Неверный или просроченный refresh токен
+ */
 // --- НАШ НОВЫЙ ENDPOINT ОБНОВЛЕНИЯ ТОКЕНА ---
 app.post('/api/refresh', async (req, res) => {
     try {
@@ -173,7 +264,7 @@ app.post('/api/refresh', async (req, res) => {
         const newAccessToken = jwt.sign(
             payload,
             process.env.JWT_ACCESS_SECRET,
-            { expiresIn: '10m' }
+            { expiresIn: '1h' }
         );
 
         const newRefreshToken = jwt.sign(
