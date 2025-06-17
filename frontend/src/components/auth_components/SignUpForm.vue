@@ -105,7 +105,7 @@ onMounted(() => {
 
     <div class="agreement">
       <input v-model="checkAgreed" type="checkbox" id="agreement" name="agreement">
-      <label for="agreement">do you accept our <a href="#" @click="showTOS = true">terms of agreement</a>?</label>
+      <label for="agreement">do you accept our <a href="#" @click="() => showTOS = true">terms of agreement</a>?</label>
     </div>
 
     <button :disabled="isLoading || validationErrors.length !== 0" type="submit">
@@ -117,7 +117,7 @@ onMounted(() => {
     <span class="error_message">{{ serverError }}</span>
 
     <!--  ToS  -->
-    <TermsOfService v-if="showTOS" :close="showTOS = false" />
+    <TermsOfService v-if="showTOS" :close="() => showTOS = false" />
   </form>
 </template>
 

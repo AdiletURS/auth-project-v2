@@ -25,6 +25,8 @@ const setFormType = (type) => {
 
 <template>
   <div class="auth_container" v-on-click-outside="close">
+    <button id="btn_close" @click="close">close</button>
+
     <h2 class="title">{{ state.title }}</h2>
     <div class="form_cont">
       <SignInForm :setForm="setFormType" v-if="state.formType === 'sign-in'"/>
@@ -53,6 +55,12 @@ const setFormType = (type) => {
   transform: rotate(180deg);
 }
 
+#btn_close {
+  position: fixed;
+  right: 24px;
+  top: 24px;
+}
+
 :deep(form) {
   display: flex;
   flex-direction: column;
@@ -72,13 +80,22 @@ const setFormType = (type) => {
   }
 }
 
+@media (min-width: 850px) {
+  #btn_close {
+    display: none;
+  }
+}
+
 /* Phone */
 @media (max-width: 850px) {
   .auth_container {
     width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
 
     border: none;
-    border-bottom: 2px solid var(--color-secondary);
   }
 
   .title {

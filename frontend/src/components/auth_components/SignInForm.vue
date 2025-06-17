@@ -14,16 +14,16 @@ const username = ref("");
 const password = ref("");
 
 const isLoading = ref(false);
-const errorMsg = ref("");
+const serverError = ref("");
 
 const submitForm = () => {
   if (!username.value || !password.value) {
-    errorMsg.value = "Username/Password can't be empty.";
+    serverError.value = "Username/Password can't be empty.";
     return;
   }
 
   isLoading.value = true;
-  errorMsg.value = "";
+  serverError.value = "";
 
   login({
     login: username.value,
@@ -46,9 +46,9 @@ const submitForm = () => {
         isLoading.value = false;
 
         if (err.response && err.response.data) {
-          errorMsg.value = err.response.data.message;
+          serverError.value = err.response.data.message;
         } else {
-          errorMsg.value = "Failed... Check console for stack trace."
+          serverError.value = "Failed... Check console for stack trace."
         }
         console.error(err.message);
       });
@@ -71,7 +71,7 @@ const submitForm = () => {
       </button>
     </div>
 
-    <span class="error_message">{{ errorMsg }}</span>
+    <span class="error_message">{{ serverError }}</span>
   </form>
 </template>
 
