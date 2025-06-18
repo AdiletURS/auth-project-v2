@@ -4,7 +4,7 @@ import {onMounted, watch, ref, useTemplateRef, watchEffect, computed} from "vue"
 import {register} from "@/api/services/auth.js";
 import TermsOfService from "@/components/auth_components/TermsOfService.vue";
 import PasswordField from "@/components/auth_components/PasswordField.vue";
-import {useValidate} from "@/composables/useValidate.js";
+import {useSignUpValidate} from "@/composables/useSignUpValidate.js";
 
 const props = defineProps({
   setForm: Function
@@ -17,46 +17,15 @@ const inputPassRep = useTemplateRef("i-pass-r");
 const showTOS = ref(false);
 
 const username = ref("");
-const isUsernameValid = computed(() => {
-  const value = username.value;
-  // presence check
-  const presenceRegex = /^.+$/;
-  if (!presenceRegex.test(value))
-    return "Username can't be empty.";
-
-  // special characters check
-  const charCheck = /^[A-Za-z0-9_]+$/;
-  if (!charCheck.test(value))
-    return "Username should only consist of latin letters, numbers and underscores.";
-
-  // range check
-  if (value.length < 3) return "Username is too short.";
-  else if (value.length > 30) return "Username is too long.";
-})
-
 const password = ref("");
-const isPasswordValid = computed(() => {
-  const value = password.value;
-  // presence check
-  const presenceRegex = /^.+$/;
-  if (!presenceRegex.test(value))
-    return "Password can't be empty.";
-
-  // range check
-  if (value.length < 6)
-    return "Password is too short.";
-})
-
 const repeatPassword = ref("");
-const isRepeatPassValid = computed(() => {
-  // similarity check
-  if (repeatPassword.value !== password.value)
-    return "Passwords are not similar";
-})
-
 const checkAgreed = ref(false);
-const hasAgreed =
-    computed(() => !checkAgreed.value ? "You have to agree with the ToS." : "");
+const {
+  isUsernameValid,
+  isPasswordValid,
+  isRepeatPassValid,
+  hasAgreed
+} = useSignUpValidate(username, password, repeatPassword, checkAgreed);
 
 const isLoading = ref(false);
 const serverError = ref("");
