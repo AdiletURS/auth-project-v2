@@ -1,8 +1,10 @@
 import axios from "axios";
 import {refresh} from "@/api/services/auth.js";
 
+const AUTH_BASE_URL = "http://0.0.0.0:3000/api";
+const TODO_BASE_URL = "http://0.0.0.0:3001/api";
+
 const axiosClient = axios.create({
-    baseURL: "http://0.0.0.0:3000/api",
     headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"
@@ -73,4 +75,4 @@ const hasAnyTokens = () => {
         localStorage.getItem("refreshToken"));
 }
 
-export {axiosClient, setTokens, hasAnyTokens};
+export {axiosClient, setTokens, hasAnyTokens, TODO_BASE_URL, AUTH_BASE_URL};

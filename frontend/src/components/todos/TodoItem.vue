@@ -2,7 +2,7 @@
 defineProps({
   title: String,
   completed: Boolean,
-  createdAt: Date
+  createdAt: Number
 })
 </script>
 

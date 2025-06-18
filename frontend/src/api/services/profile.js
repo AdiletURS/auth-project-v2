@@ -1,7 +1,7 @@
-import {axiosClient} from "@/api/apiClient.js";
+import {AUTH_BASE_URL, axiosClient} from "@/api/apiClient.js";
 
 const getProfile = () => {
-    return axiosClient.get("/profile");
+    return axiosClient.get(AUTH_BASE_URL + "/profile");
 }
 
 export {getProfile}

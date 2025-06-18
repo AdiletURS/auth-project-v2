@@ -25,7 +25,7 @@ const router = createRouter({
         },
         {
             path: "/todos",
-            name: "dashboard",
+            name: "todos",
             component: TodosView
         },
 
