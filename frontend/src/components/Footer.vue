@@ -32,6 +32,8 @@
   list-style-type: none;
 
   a {
+    position: relative;
+    z-index: -10000;
     color: var(--color-secondary);
   }
 }

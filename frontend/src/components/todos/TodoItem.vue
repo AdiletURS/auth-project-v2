@@ -1,4 +1,6 @@
 <script setup>
+import TodoEditDialog from "@/components/todos/TodoEditDialog.vue";
+
 defineProps({
   title: String,
   completed: Boolean,
@@ -18,6 +20,8 @@ defineProps({
       <button class="btn_status_changer">mark as complete</button>
       <button class="btn_edit">edit</button>
     </div>
+
+    <TodoEditDialog />
   </div>
 </template>
 
