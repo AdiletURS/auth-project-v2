@@ -1,6 +1,6 @@
 <script setup>
 import {Icon} from "@iconify/vue";
-import {onMounted, watch, ref, useTemplateRef, watchEffect, computed} from "vue";
+import {ref} from "vue";
 import {register} from "@/api/services/auth.js";
 import TermsOfService from "@/components/auth_components/TermsOfService.vue";
 import PasswordField from "@/components/auth_components/PasswordField.vue";
@@ -9,10 +9,6 @@ import {useSignUpValidate} from "@/composables/useSignUpValidate.js";
 const props = defineProps({
   setForm: Function
 });
-
-const inputName = useTemplateRef("i-name");
-const inputPass = useTemplateRef("i-pass");
-const inputPassRep = useTemplateRef("i-pass-r");
 
 const showTOS = ref(false);
 
@@ -24,16 +20,16 @@ const {
   isUsernameValid,
   isPasswordValid,
   isRepeatPassValid,
-  hasAgreed
+  hasAgreed,
+  hasAnyFailed
 } = useSignUpValidate(username, password, repeatPassword, checkAgreed);
 
 const isLoading = ref(false);
 const serverError = ref("");
-const validationErrors = ref([]);
 
 const submitForm = () => {
-  if (validationErrors.value.length !== 0) {
-    console.warn("there are failed validations...")
+  if (hasAnyFailed.value) {
+    console.warn("there are failed validations...");
     return;
   }
 
@@ -70,31 +66,30 @@ const submitForm = () => {
 <template>
   <form @submit.prevent="submitForm">
     <label for="username">username</label>
-    <input v-model="username" ref="i-name" type="text" id="username" name="username" placeholder="ur username">
+    <input :class="isUsernameValid === undefined ? '' : 'invalid'"
+           v-model="username"
+           type="text" id="username"
+           name="username"
+           placeholder="ur username">
 
-    <PasswordField ref="i-pass" v-model="password" />
-    <PasswordField ref="i-pass-r" v-model="repeatPassword" />
+    <PasswordField :valid="isPasswordValid === undefined" v-model="password" />
+    <PasswordField :valid="isRepeatPassValid === undefined" v-model="repeatPassword" />
 
     <div class="agreement">
       <input v-model="checkAgreed" type="checkbox" id="agreement" name="agreement">
       <label for="agreement">do you accept our <a href="#" @click="() => showTOS = true">terms of agreement</a>?</label>
     </div>
 
-    <button :disabled="isLoading || validationErrors.length !== 0" type="submit">
+    <button :disabled="isLoading || hasAnyFailed.length" type="submit">
       <span v-if="!isLoading">sign up</span>
       <span v-else><Icon icon="svg-spinners:bars-fade" /></span>
     </button>
 
-    <span v-for="err in validationErrors" class="error_message">{{ err }}</span>
+    <span class="error_message">{{ hasAnyFailed }}</span>
     <span class="error_message">{{ serverError }}</span>
 
     <!--  ToS  -->
     <TermsOfService v-if="showTOS" :close="() => showTOS = false" />
-
-    <h6>{{ isUsernameValid }}</h6>
-    <h6>{{ isPasswordValid }}</h6>
-    <h6>{{ isRepeatPassValid }}</h6>
-    <h6>{{ hasAgreed }}</h6>
   </form>
 </template>
 

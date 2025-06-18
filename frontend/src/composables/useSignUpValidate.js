@@ -17,7 +17,6 @@ export function useSignUpValidate(username, password, rPassword, agreed) {
         if (value.length < 3) return "Username is too short.";
         else if (value.length > 30) return "Username is too long.";
     });
-
     const isPasswordValid = computed(() => {
         const value = password.value;
         // presence check
@@ -29,20 +28,23 @@ export function useSignUpValidate(username, password, rPassword, agreed) {
         if (value.length < 6)
             return "Password is too short.";
     });
-
     const isRepeatPassValid = computed(() => {
         // similarity check
         if (rPassword.value !== password.value)
             return "Passwords are not similar";
     });
-
     const hasAgreed =
         computed(() => !agreed.value ? "You have to agree with the ToS." : "");
+
+    const hasAnyFailed = computed(() => {
+        return isUsernameValid.value || isPasswordValid.value || isRepeatPassValid.value || hasAgreed.value;
+    })
 
     return {
         isUsernameValid,
         isPasswordValid,
         isRepeatPassValid,
-        hasAgreed
+        hasAgreed,
+        hasAnyFailed
     }
 }

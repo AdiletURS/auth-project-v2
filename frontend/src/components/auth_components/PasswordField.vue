@@ -3,14 +3,12 @@ import {Icon} from "@iconify/vue";
 import {ref} from "vue";
 
 const props = defineProps({
-  modelValue: String,
+  valid: {
+    type: Boolean,
+    default: true
+  },
   placeholder: String
 })
-
-const isInvalid = ref(false);
-const setInvalid = (invalid = false) => {
-  isInvalid.value = invalid;
-}
 
 const emit = defineEmits(['update:modelValue']);
 const handleInput = (event) => {
@@ -20,18 +18,14 @@ const handleInput = (event) => {
 const fieldType = ref("password");
 const switchVisibility = () =>
     fieldType.value = fieldType.value === "password" ? "text" : "password";
-
-defineExpose({
-  setInvalid
-});
 </script>
 
 <template>
   <div class="password_field">
     <label for="password">password</label>
-    <input :value="modelValue" @input="handleInput" :type="fieldType" id="password" name="password"
+    <input @input="handleInput" :type="fieldType" id="password" name="password"
            :placeholder="placeholder"
-           :class="isInvalid ? 'invalid' : ''">
+           :class="props.valid ? '' : 'invalid'">
     <button @click="switchVisibility" type="button" class="toggle">
       <Icon v-if="fieldType === 'password'" icon="material-symbols:visibility-outline"/>
       <Icon v-else icon="material-symbols:visibility-off-outline"/>
@@ -47,14 +41,6 @@ defineExpose({
 
   input {
     margin-right: 55px;
-  }
-}
-
-.invalid {
-  border-color: var(--color-invalid);
-
-  &:focus {
-    box-shadow: inset 0 0 0 1px var(--color-invalid);
   }
 }
 
