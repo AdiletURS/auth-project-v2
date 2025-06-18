@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const cors = require('cors');
 const express = require('express');
 const setupSwagger = require('./swagger');
 // Импортируем наш модуль для работы с БД
@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 3000;
 const logger = require('./logger');
 setupSwagger(app);
 
+app.use(cors());
 app.use(express.json());
 
 const registerSchema = Joi.object({

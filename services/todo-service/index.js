@@ -1,5 +1,6 @@
 // services/todo-service/index.js
 require('dotenv').config();
+const cors = require("cors");
 const express = require('express');
 const db = require('./db');
 const authMiddleware = require('./authMiddleware');
@@ -11,7 +12,7 @@ const validationMiddleware = require('./validationMiddleware');
 const app = express();
 const PORT = process.env.TODO_SERVICE_PORT || 3001;
 app.use(express.json());
-
+app.use(cors());
 // Схемы валидации для ToDo Service
 const todoSchema = Joi.object({
     title: Joi.string().min(1).required(),
