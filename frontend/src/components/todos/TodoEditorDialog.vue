@@ -20,7 +20,7 @@ const props = defineProps({
 const title = ref(props.todoObject.title);
 
 const submit = () => {
-  props.submitEdit({ title: title.value });
+  props.submitEdit({ title: title.value, completed: props.todoObject.completed });
   props.close();
 }
 

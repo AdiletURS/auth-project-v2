@@ -1,6 +1,6 @@
 <script setup>
 import TodoItem from "@/components/todos/TodoItem.vue";
-import {onBeforeMount, onMounted, ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import {createTodo, listTodos} from "@/api/services/todos.js";
 import TodoEditorDialog from "@/components/todos/TodoEditorDialog.vue";
 
