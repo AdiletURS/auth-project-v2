@@ -20,9 +20,7 @@ onBeforeMount(() => {
   <h4 v-if="todos.length === 0">todos are empty...</h4>
   <TodoItem v-else
             v-for="todo in todos"
-            :title="todo.title"
-            :completed="todo.completed"
-            :created-at="todo.created_at"
+            :todo-object="todo"
             :key="todo.id"/>
 </template>
 
