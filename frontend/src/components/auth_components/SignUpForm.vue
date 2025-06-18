@@ -1,9 +1,10 @@
 <script setup>
 import {Icon} from "@iconify/vue";
-import {onMounted, watch, ref, useTemplateRef, watchEffect} from "vue";
+import {onMounted, watch, ref, useTemplateRef, watchEffect, computed} from "vue";
 import {register} from "@/api/services/auth.js";
 import TermsOfService from "@/components/auth_components/TermsOfService.vue";
 import PasswordField from "@/components/auth_components/PasswordField.vue";
+import {useValidate} from "@/composables/useValidate.js";
 
 const props = defineProps({
   setForm: Function
@@ -16,11 +17,27 @@ const inputPassRep = useTemplateRef("i-pass-r");
 const showTOS = ref(false);
 
 const username = ref("");
-watch(username, (username) => {
-  // if (username)
+const isUsernameValid = computed(() => {
+  // presence check
+  const presenceRegex = /^.+$/;
+  if (!presenceRegex.test(username.value)) {
+    return "Username can't be empty.";
+  }
+
+  // special characters check
+  const charCheck = /^[A-Za-z0-9_]+$/;
+  if (!charCheck.test(username.value))
+    return "Username should only consist of latin letters, numbers and underscores."
+
+  // range check
+  if (username.value.length < 3) return "Username is too short."
+  else if (username.value.length > 30) return "Username is too long."
 })
 
 const password = ref("");
+const isPasswordLong = useValidate(password, /^.{6,}$/);
+
+
 const repeatPassword = ref("");
 const checkAgreed = ref(false);
 
@@ -65,10 +82,9 @@ const submitForm = () => {
 
 onMounted(() => {
   watchEffect(() => {
-    // todo: надо бы в composable запихать, но мне лень.
     validationErrors.value = [];
-    const is_valid = true
-    // Username presence
+
+    /*// Username presence
     if (!username.value) {
       inputName.value.style = "border-color: red";
       validationErrors.value.push("Username can't be empty.");
@@ -92,7 +108,7 @@ onMounted(() => {
     // ToS check presence
     if (!checkAgreed.value) {
       validationErrors.value.push("You have to agree with the ToS.")
-    }
+    }*/
   });
 })
 </script>
@@ -120,6 +136,9 @@ onMounted(() => {
 
     <!--  ToS  -->
     <TermsOfService v-if="showTOS" :close="() => showTOS = false" />
+
+    <h6>{{ isUsernameValid }}</h6>
+    <h6>is pass long enough {{ isPasswordLong }}</h6>
   </form>
 </template>
 
