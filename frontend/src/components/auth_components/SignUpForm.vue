@@ -1,36 +1,35 @@
 <script setup>
 import {Icon} from "@iconify/vue";
-import {onMounted, watch, ref, useTemplateRef, watchEffect} from "vue";
+import {ref} from "vue";
 import {register} from "@/api/services/auth.js";
 import TermsOfService from "@/components/auth_components/TermsOfService.vue";
 import PasswordField from "@/components/auth_components/PasswordField.vue";
+import {useSignUpValidate} from "@/composables/useSignUpValidate.js";
 
 const props = defineProps({
   setForm: Function
 });
 
-const inputName = useTemplateRef("i-name");
-const inputPass = useTemplateRef("i-pass");
-const inputPassRep = useTemplateRef("i-pass-r");
-
 const showTOS = ref(false);
 
 const username = ref("");
-watch(username, (username) => {
-  // if (username)
-})
-
 const password = ref("");
 const repeatPassword = ref("");
 const checkAgreed = ref(false);
+const {
+  isUsernameValid,
+  isPasswordValid,
+  isRepeatPassValid,
+  hasAgreed,
+  hasAnyFailed
+} = useSignUpValidate(username, password, repeatPassword, checkAgreed);
 
 const isLoading = ref(false);
 const serverError = ref("");
-const validationErrors = ref([]);
 
 const submitForm = () => {
-  if (validationErrors.value.length !== 0) {
-    console.warn("there are failed validations...")
+  if (hasAnyFailed.value) {
+    console.warn("there are failed validations...");
     return;
   }
 
@@ -62,60 +61,31 @@ const submitForm = () => {
         console.error(err.message);
       });
 }
-
-onMounted(() => {
-  watchEffect(() => {
-    // todo: надо бы в composable запихать, но мне лень.
-    validationErrors.value = [];
-    const is_valid = true
-    // Username presence
-    if (!username.value) {
-      inputName.value.style = "border-color: red";
-      validationErrors.value.push("Username can't be empty.");
-    } else inputName.value.style = "border-color: var(--color-secondary)";
-
-    // Password length
-    if (password.value.length < 6) {
-      inputPass.value.setBorderColor("red");
-      validationErrors.value.push("Password is too short.")
-    } else {
-      inputPass.value.setBorderColor();
-    }
-
-    // Password similarity
-    if (password.value !== repeatPassword.value) {
-      inputPassRep.value.setBorderColor("red");
-      validationErrors.value.push("Passwords are not similar.")
-    } else {
-      inputPassRep.value.setBorderColor();
-    }
-    // ToS check presence
-    if (!checkAgreed.value) {
-      validationErrors.value.push("You have to agree with the ToS.")
-    }
-  });
-})
 </script>
 
 <template>
   <form @submit.prevent="submitForm">
     <label for="username">username</label>
-    <input v-model="username" ref="i-name" type="text" id="username" name="username" placeholder="ur username">
+    <input :class="isUsernameValid === undefined ? '' : 'invalid'"
+           v-model="username"
+           type="text" id="username"
+           name="username"
+           placeholder="ur username">
 
-    <PasswordField ref="i-pass" v-model="password" />
-    <PasswordField ref="i-pass-r" v-model="repeatPassword" />
+    <PasswordField :valid="isPasswordValid === undefined" v-model="password" />
+    <PasswordField :valid="isRepeatPassValid === undefined" v-model="repeatPassword" />
 
     <div class="agreement">
       <input v-model="checkAgreed" type="checkbox" id="agreement" name="agreement">
       <label for="agreement">do you accept our <a href="#" @click="() => showTOS = true">terms of agreement</a>?</label>
     </div>
 
-    <button :disabled="isLoading || validationErrors.length !== 0" type="submit">
+    <button :disabled="isLoading || hasAnyFailed.length" type="submit">
       <span v-if="!isLoading">sign up</span>
       <span v-else><Icon icon="svg-spinners:bars-fade" /></span>
     </button>
 
-    <span v-for="err in validationErrors" class="error_message">{{ err }}</span>
+    <span class="error_message">{{ hasAnyFailed }}</span>
     <span class="error_message">{{ serverError }}</span>
 
     <!--  ToS  -->
