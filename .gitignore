@@ -1,10 +1,9 @@
 # Dependencies
-/backend/node_modules
+/services/auth-service/node_modules
+/services/todo-service/node_modules
 /frontend/node_modules
 
-# Environment variables
-.env
-/backend/.env
+
 
 # Build folder
 /dist

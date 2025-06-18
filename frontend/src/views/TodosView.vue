@@ -25,7 +25,7 @@ const createItem = (todo) => {
 
 const deleteItem = (id) => {
   deleteTodo(id)
-      .then(res => {
+      .then(() => {
         console.warn("successfully deleted id", id);
         const index = todos.value.findIndex(todo => todo.id === id);
         if (index !== -1) {
