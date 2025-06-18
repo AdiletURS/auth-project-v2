@@ -18,28 +18,45 @@ const showTOS = ref(false);
 
 const username = ref("");
 const isUsernameValid = computed(() => {
+  const value = username.value;
   // presence check
   const presenceRegex = /^.+$/;
-  if (!presenceRegex.test(username.value)) {
+  if (!presenceRegex.test(value))
     return "Username can't be empty.";
-  }
 
   // special characters check
   const charCheck = /^[A-Za-z0-9_]+$/;
-  if (!charCheck.test(username.value))
-    return "Username should only consist of latin letters, numbers and underscores."
+  if (!charCheck.test(value))
+    return "Username should only consist of latin letters, numbers and underscores.";
 
   // range check
-  if (username.value.length < 3) return "Username is too short."
-  else if (username.value.length > 30) return "Username is too long."
+  if (value.length < 3) return "Username is too short.";
+  else if (value.length > 30) return "Username is too long.";
 })
 
 const password = ref("");
-const isPasswordLong = useValidate(password, /^.{6,}$/);
+const isPasswordValid = computed(() => {
+  const value = password.value;
+  // presence check
+  const presenceRegex = /^.+$/;
+  if (!presenceRegex.test(value))
+    return "Password can't be empty.";
 
+  // range check
+  if (value.length < 6)
+    return "Password is too short.";
+})
 
 const repeatPassword = ref("");
+const isRepeatPassValid = computed(() => {
+  // similarity check
+  if (repeatPassword.value !== password.value)
+    return "Passwords are not similar";
+})
+
 const checkAgreed = ref(false);
+const hasAgreed =
+    computed(() => !checkAgreed.value ? "You have to agree with the ToS." : "");
 
 const isLoading = ref(false);
 const serverError = ref("");
@@ -79,38 +96,6 @@ const submitForm = () => {
         console.error(err.message);
       });
 }
-
-onMounted(() => {
-  watchEffect(() => {
-    validationErrors.value = [];
-
-    /*// Username presence
-    if (!username.value) {
-      inputName.value.style = "border-color: red";
-      validationErrors.value.push("Username can't be empty.");
-    } else inputName.value.style = "border-color: var(--color-secondary)";
-
-    // Password length
-    if (password.value.length < 6) {
-      inputPass.value.setInvalid(true);
-      validationErrors.value.push("Password is too short.")
-    } else {
-      inputPass.value.setInvalid(false);
-    }
-
-    // Password similarity
-    if (password.value !== repeatPassword.value) {
-      inputPassRep.value.setInvalid(true)
-      validationErrors.value.push("Passwords are not similar.")
-    } else {
-      inputPassRep.value.setInvalid(false);
-    }
-    // ToS check presence
-    if (!checkAgreed.value) {
-      validationErrors.value.push("You have to agree with the ToS.")
-    }*/
-  });
-})
 </script>
 
 <template>
@@ -138,7 +123,9 @@ onMounted(() => {
     <TermsOfService v-if="showTOS" :close="() => showTOS = false" />
 
     <h6>{{ isUsernameValid }}</h6>
-    <h6>is pass long enough {{ isPasswordLong }}</h6>
+    <h6>{{ isPasswordValid }}</h6>
+    <h6>{{ isRepeatPassValid }}</h6>
+    <h6>{{ hasAgreed }}</h6>
   </form>
 </template>
 
