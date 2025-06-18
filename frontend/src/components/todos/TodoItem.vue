@@ -10,14 +10,14 @@ const props = defineProps({
 const todo = ref({
   title: props.todoObject.title,
   completed: props.todoObject.completed,
-  createdAt: props.todoObject.created_at
+  created_at: props.todoObject.created_at
 });
 
 const isEditorOpen = ref(false);
 const showEditor = () => isEditorOpen.value = true;
 const closeEditor = () => isEditorOpen.value = false;
 
-const editItem = (title, completed = todo.value.completed) => {
+const editItem = (title = todo.value.title, completed = todo.value.completed) => {
   const todoObj = {
     title,
     completed
@@ -31,6 +31,11 @@ const editItem = (title, completed = todo.value.completed) => {
       .catch(err => console.log(err));
 }
 
+const toggleCompletion = () => {
+  todo.value.completed = !todo.value.completed;
+  editItem();
+}
+
 </script>
 
 <template>
@@ -38,11 +43,14 @@ const editItem = (title, completed = todo.value.completed) => {
     <div class="info">
       <p class="title">{{ todo.title }}</p>
       <p class="status">completed: {{ todo.completed }}</p>
-      <p class="creation_date">created at: {{ todo.createdAt }}</p>
+      <p class="creation_date">created at: {{ todo.created_at }}</p>
     </div>
 
     <div class="controls">
-      <button class="btn_status_changer">mark as complete</button>
+      <button @click="toggleCompletion" class="btn_status_changer">
+        <span v-if="todo.completed">mark as complete</span>
+        <span v-else>mark as incomplete</span>
+      </button>
       <button class="btn_edit" @click="showEditor()">edit</button>
     </div>
 

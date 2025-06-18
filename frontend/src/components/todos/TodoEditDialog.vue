@@ -1,5 +1,6 @@
 <script setup>
 import {ref} from "vue";
+import DialogContainer from "@/components/DialogContainer.vue";
 
 const props = defineProps({
   close: Function,
@@ -17,7 +18,7 @@ const submit = () => {
 </script>
 
 <template>
-  <div class="container">
+  <DialogContainer>
     <form class="edit_dialog" @submit.prevent="">
       <label for="edit_area">edit item</label>
       <textarea v-model="title" id="edit_area">{{ title }}</textarea>
@@ -27,34 +28,14 @@ const submit = () => {
         <button @click="submit" type="submit">submit</button>
       </div>
     </form>
-  </div>
+  </DialogContainer>
 </template>
 
 <style scoped>
-.container {
-  width: 100%;
-  height: 100%;
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  backdrop-filter: brightness(.5);
-}
-
 .edit_dialog {
-  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-
-  border: 2px solid var(--color-secondary);
-  background-color: var(--color-primary);
 }
 
 .buttons {
