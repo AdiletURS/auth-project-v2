@@ -1,5 +1,5 @@
 <script setup>
-import TodoEditDialog from "@/components/todos/TodoEditDialog.vue";
+import TodoEditorDialog from "@/components/todos/TodoEditorDialog.vue";
 import {ref} from "vue";
 import {editTodo} from "@/api/services/todos.js";
 
@@ -17,13 +17,8 @@ const isEditorOpen = ref(false);
 const showEditor = () => isEditorOpen.value = true;
 const closeEditor = () => isEditorOpen.value = false;
 
-const editItem = (title = todo.value.title, completed = todo.value.completed) => {
-  const todoObj = {
-    title,
-    completed
-  }
-
-  editTodo(todoObj, props.todoObject.id)
+const editItem = (newTodo = {title: todo.value.title, completed: todo.value.completed}) => {
+  editTodo(newTodo, props.todoObject.id)
       .then(res => {
         console.warn("todo was updated", res.data);
         todo.value = res.data;
@@ -54,7 +49,7 @@ const toggleCompletion = () => {
       <button class="btn_edit" @click="showEditor()">edit</button>
     </div>
 
-    <TodoEditDialog v-if="isEditorOpen" :close="closeEditor" :submit-edit="editItem" :todo-object="todo" />
+    <TodoEditorDialog v-if="isEditorOpen" :close="closeEditor" :submit-edit="editItem" :todo-object="todo" />
   </div>
 </template>
 

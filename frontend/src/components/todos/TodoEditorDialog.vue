@@ -3,15 +3,24 @@ import {ref} from "vue";
 import DialogContainer from "@/components/DialogContainer.vue";
 
 const props = defineProps({
+  label: {
+    type: String,
+    default: "edit item"
+  },
   close: Function,
   submitEdit: Function,
-  todoObject: Object
+  todoObject: {
+    type: Object,
+    default: {
+      title: ""
+    }
+  }
 })
 
 const title = ref(props.todoObject.title);
 
 const submit = () => {
-  props.submitEdit(title.value);
+  props.submitEdit({ title: title.value });
   props.close();
 }
 
@@ -20,7 +29,7 @@ const submit = () => {
 <template>
   <DialogContainer>
     <form class="edit_dialog" @submit.prevent="">
-      <label for="edit_area">edit item</label>
+      <label for="edit_area">{{ label }}</label>
       <textarea v-model="title" id="edit_area">{{ title }}</textarea>
 
       <div class="buttons">
