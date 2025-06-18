@@ -4,7 +4,8 @@ import {ref} from "vue";
 import {editTodo} from "@/api/services/todos.js";
 
 const props = defineProps({
-  todoObject: Object
+  todoObject: Object,
+  deleteFunc: Function
 });
 
 const todo = ref({
@@ -47,6 +48,7 @@ const toggleCompletion = () => {
         <span v-else>mark as incomplete</span>
       </button>
       <button class="btn_edit" @click="showEditor()">edit</button>
+      <button @click="deleteFunc(todoObject.id)">delete</button>
     </div>
 
     <TodoEditorDialog v-if="isEditorOpen" :close="closeEditor" :submit-edit="editItem" :todo-object="todo" />

@@ -1,7 +1,7 @@
 <script setup>
 import TodoItem from "@/components/todos/TodoItem.vue";
 import {onBeforeMount, ref} from "vue";
-import {createTodo, listTodos} from "@/api/services/todos.js";
+import {createTodo, deleteTodo, listTodos} from "@/api/services/todos.js";
 import TodoEditorDialog from "@/components/todos/TodoEditorDialog.vue";
 
 
@@ -23,6 +23,17 @@ const createItem = (todo) => {
       });
 }
 
+const deleteItem = (id) => {
+  deleteTodo(id)
+      .then(res => {
+        console.warn("successfully deleted id", id);
+        const index = todos.value.findIndex(todo => todo.id === id);
+        if (index !== -1) {
+          todos.value.splice(index, 1);
+        }
+      });
+}
+
 onBeforeMount(() => {
   listTodos()
       .then(res => {
@@ -41,7 +52,8 @@ onBeforeMount(() => {
   <TodoItem v-else
             v-for="todo in todos"
             :todo-object="todo"
-            :key="todo.id"/>
+            :key="todo.id"
+            :delete-func="deleteItem"/>
 </template>
 
 <style scoped>
